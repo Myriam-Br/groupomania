@@ -47,13 +47,11 @@ export default {
         register() {
             if(this.firstname !== "" || this.lastname !== "" || this.username !== "" || this.email !== "" || this.password !== "" ) {
                 this.error = false;
-                this.errorMsg= "";
-                return;     
-            }
+                this.errorMsg= "";  
+            }   
             
             this.error = true;
-            this.errorMsg = "Please fill out all the fields";
-            return;
+            this.errorMsg = "Please fill out all the fields";        
         },
     }
 
