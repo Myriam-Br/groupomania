@@ -14,7 +14,7 @@
       </p>
       <p class="forgotpw-msg">
            Forgot your password?
-        <router-link class="link link-to-resetpw" :to="{ name : 'forgotpassword'}">Change password</router-link>
+        <router-link class="link link-to-resetpw" :to="{ name : 'forgotpassword'}">Reset password</router-link>
       </p>
        
   </div>

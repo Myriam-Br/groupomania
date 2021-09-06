@@ -4,8 +4,9 @@
       <h1>Reset your password</h1>
        <div class="form-resetpw">
         <label for="email">Email</label>
-        <input @submit="checkForm" type="email" class="username" v-model= "email" novalidate="true">
+        <input  type="email" class="username" v-model= "email">
         <button @click="openModal" class="send-mail">Send mail</button>
+        <span class="errormsg">{{this.errormsg}}</span>
       </div>
   </div>
 </template>
@@ -17,10 +18,11 @@ export default {
     
     data() {
         return {
-            error: [],
+            error: null,
             email: null,
             modalActive: false,
             modalMessage: "",
+            errormsg: "",
         }
     },
 
@@ -33,21 +35,17 @@ export default {
             this.email = "";
         },    
 
-        checkForm() {
-            this.errors = [];
-            if(!this.email){
-                this.errors.push('Email required.');
-            }else if (!this.validEmail(this.email)) {
-                this.errors.push('Valid email required.');
-            }   
-        },
 
-      
         openModal() {
            var regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if(this.email != "" && regex.test(this.email)){
                 this.modalActive = true;
+                this.error = false;
+                this.errormsg = "";
             }
+        
+            this.error = true;
+            this.errormsg = "Email required";
         },
     }
 
