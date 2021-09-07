@@ -3,11 +3,12 @@
       <h1>SIGN IN</h1>
       <div class="form-signin">
         <label for="username">Username</label>
-        <input type="text" class="username">
+        <input type="text" class="username" v-model="username">
         <label for="password">Password</label>
-        <input type="password" class="password">
+        <input type="password" class="password" v-model="password">
       </div>
-      <button class="btn-signin">Sign In</button>
+      <button class="btn-signin" @click="login">Sign In</button>
+      <div class="error" v-if="error">{{this.errorMsg}}</div>
       <p class="signup-msg">
         Don't have an account? 
         <router-link class="link link-to-signup" :to="{ name : 'signup'}">Sign up</router-link>  
@@ -16,6 +17,7 @@
            Forgot your password?
         <router-link class="link link-to-resetpw" :to="{ name : 'forgotpassword'}">Reset password</router-link>
       </p>
+    
        
   </div>
 </template>
@@ -23,6 +25,30 @@
 <script>
 export default {
     name: "signin",
+   
+    data() {
+        return{
+          username: null,
+          password: null,
+          error: null,
+          errorMsg: "",
+        };
+    },
+
+    methods: {
+        login() {
+            if(this.username !== "" || this.password !== "" ) {
+                this.error = false;
+                this.errorMsg= "";  
+                this.$router.push('forum') 
+            }   
+            
+            this.error = true;
+            this.errorMsg = "Please fill out all the fields";        
+        },
+    }
+    
+
  
 }
 </script>

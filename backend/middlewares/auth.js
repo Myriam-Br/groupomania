@@ -1,5 +1,4 @@
 //exporter dans routes pour les post et création de post
-
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {

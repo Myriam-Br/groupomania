@@ -1,60 +1,98 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const jwtAdmin = require('../middlewares/admin');
 const User = require('../models/user')
 
-exports.signup = async(req, res, next) => {
-
-
+//routes
+exports.register = (req, res, next) => {
     var email = req.body.email;
     var username = req.body.username;
     var password = req.body.password;
-    var bio = req.body.bio;   
-    var hashedPw = await bcrypt.hash(req.body.password, 10);
-        try{  
-        const user = new User({
-            email: email,
-            username: username,
-            password: hashedPw,
-            bio: bio,
-            isAdmin: 0
-        });
+    var bio = req.body.bio;
 
-        user.save() 
-        return res.status(201).json({ 'userId': user.id})     
-        }
+    console.log(req.body);
 
-        catch{
-            (error => res.status(500).json({ error }));
-        }
-
-        next();
- 
-};
-
-exports.login = async(req, res) => {
-    var user =  User.findOne({ attributes: ['email'], where: {email: email}})
-   
-    if (user == null) {
-        return res.status(400).send('Cannot find user')
+    //vérifier si paramètres existent
+    if(email == undefined){
+        return res.status(400).json({'error': 'missing parameters'})
     }
-    try {
-        const accessToken = jwt.sign(user,'RANDOM_TOKEN_SECRET', { expiresIn: '24h' });
-        var bcryptCheck = await bcrypt.compare(req.body.password, user.password) 
-        if(bcryptCheck) {
-        res.status(200).json({
-            userId: user.id,
-            token : accessToken,
-        });
-        } else {
-        res.send('Not Allowed')
+
+    //TODO: vérifier taille pseudo, regex,....
+
+    User.findOne({
+        attributes: ['email'],
+        where: {email: email}
+    })
+
+    .then(function(userFound) {
+        if(!userFound){
+            var hashedPw = bcrypt.hash(req.body.password, 10);
+            var user = new User({
+                email: email,
+                username: username,
+                password: hashedPw,
+                bio: bio,
+                isAdmin: 0
+            })
+
+            .then(function(user) {
+                return res.status(201).json({
+                    'userId': user.id
+                })
+            })
+
+            .catch(function(err) {
+                return res.status(500).json({ 'error': 'cannot add user'})
+            });
+
+
+        } else {     
+            return res.status(400).json({ 'error': 'user already exist'})
         }
-    } 
-    catch {
-        res.status(500).send()
-    }       
-    next();
-};
+        
+    })
+    .catch(function(err) {
+        return res.status(500).json({ 'error': 'unable to verify user'})
+    });
 
 
- 
-    
+}
+
+exports.login = (req, res, next) => {
+    var email = req.body.email;
+    var password = req.body.password;
+
+    if(email == null || password == null){
+        return res.status(400).json({ 'error': 'missing parameters'});
+    }
+
+    //TODO -> verifier username, regex pwd, ...
+
+    User.findOne(
+        { where: { email: email}
+    })
+    .then(userFound => {
+        if(userFound) {
+            bcrypt.compare(password, userFound.password)
+            .then(valid => {
+                if (!valid) {
+                //si le mot de passe est incorrect
+                return res.status(401).json({ error: 'invalid password !' }); //401 = accès non autorisé
+                }
+                res.status(200).json({
+                    userId: user._id,
+                    token: jwtAdmin.generateTokenForUser(userFound)
+                });
+            })
+            .catch(error => res.status(500).json({ error }));   
+        }else {
+            return res.status(404).json({ 'error': "user doesn't exist"})
+        }
+    })
+    .catch(err => {
+        return res.status(500).json({ 'error': 'unable to verify user'})
+    })
+
+
+
+}
+

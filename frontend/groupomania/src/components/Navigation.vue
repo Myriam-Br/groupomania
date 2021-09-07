@@ -4,7 +4,6 @@
      <router-link class="logo link" :to="{ name : 'home'}">GROUPOMANIA</router-link>
     <div class="menu">
       <ul class="navigation-links">
-        <router-link class="link" :to="{ name : 'home'}">Home</router-link>
         <router-link class="link" :to="{ name : 'signin'}">Sign in</router-link>
         <router-link class="link" :to="{ name : 'signup'}">Sign up</router-link>   
       </ul>

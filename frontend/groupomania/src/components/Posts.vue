@@ -1,5 +1,4 @@
-<template>
-     
+<template> 
     <div class="post">
         <h2>{{post.title}}</h2>
         <img >
@@ -7,43 +6,23 @@
         <span class="like-counter">0</span>
         <button class="disllike">Dislike</button>
         <span class="dislike-counter">0</span>
-        <ul class="comment-section">
-            <li class="coms-sent">{{comment}}</li>
-        </ul> 
-        <input type="text" class="comment" v-model= "comment">
-        <button @click="sendComment" class="btn-comment">Envoyer</button>
+        <Comments/>
+       
+       
     </div>
    
 </template>
 
 <script>
+import Comments from "../components/Comments.vue"
 export default {
     name: "posts",
     props:["post"],
-
-    data() {
-        return{
-            comment: null,
-            sampleComms: [
-                {
-                }
-            ]
-
-
-        };
-
-        
+    components: {
+        Comments,
     },
 
-    methods: {
-        sendComment() {
-            if(this.comment !== ""){
-                alert('je fonctionne');
-                console.log(document.getElementsByClassName('coms-sent'));
-            }
-        }
-
-    }
+   
 }
 </script>
 
