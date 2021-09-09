@@ -1,11 +1,7 @@
 <template>
-  <div class="comments">
-       <div class="comment-container">
-            <p class="coms-sent">{{comment}}</p>
-        </div> 
-        <input type="text" class="comment" v-model= "comment">
-        <button @click="sendComment" class="btn-comment">Envoyer</button>
-
+  <div class="comment-container">  
+        <textarea class="comment-field"></textarea>
+        <button @click="sendComment" class="btn-comment">Send</button>
   </div>
 </template>
 
@@ -53,19 +49,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.comments{
-    .comment-container{
-        width: 92%;
+.comment-container{
+        width: 100%;
         height: 50px;
         background-color: rgb(255, 255, 255);
-        border: 1px black solid;
+        border: 1px black solid;    
+        display: flex; 
+        flex-direction: column;
 
-        .coms-sent{
-            display: none;
+        .comment-field{
+                max-height: 70px;
+                resize: none;
+                border: black solid 1px;
+                overflow: auto;
+                outline: none;
+                font-size: 12px;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ;
+
         }
-    }
-    input{
-        width: 99%;
-    }
+        .btn-comment{
+            width: 60px;
+            height: 40px;
+        }
 }
 </style>

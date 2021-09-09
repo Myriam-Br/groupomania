@@ -20,6 +20,7 @@ export default {
 .profil-drop-down{
     background-color: rgb(162, 162, 179);
     padding:20px;
+    display: none;
 
 
     .list-link{

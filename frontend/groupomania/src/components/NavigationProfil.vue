@@ -52,6 +52,7 @@ export default {
         
         position: absolute;
         right: 0;
+        display: none;
     }
    
   }

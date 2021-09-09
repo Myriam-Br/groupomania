@@ -4,6 +4,7 @@ import Home from '../views/Home.vue';
 import Forum from '../views/Forum.vue';
 import CreatePost from '../views/CreatePost.vue';
 import Profil from '../views/Profil.vue';
+import EditProfil from '../views/EditProfil.vue';
 import SignUp from '../views/SignUp.vue';
 import SignIn from '../views/SignIn.vue';
 import ForgotPassword from '../views/ForgotPassword.vue';
@@ -30,6 +31,11 @@ const routes = [
     path: "/profil",
     name: "profil",
     component: Profil
+  },
+  {
+    path: "/editprofil",
+    name: "editprofil",
+    component: EditProfil
   },
   {
     path: "/signup",

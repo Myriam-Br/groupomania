@@ -2,7 +2,7 @@
   <div class="forum">
        <div class="container"> 
       <Posts :post="post" v-for="post in postSample" :key="post"/>
-    </div>
+      </div>
   </div>
 </template>
 
@@ -10,7 +10,6 @@
 import Posts from "../components/Posts.vue";
 export default {
     name:"forum",
-    props: ['post'],
     components:{
       Posts,
     },
@@ -42,6 +41,7 @@ export default {
     .container{
         display: flex;
         flex-direction: column;   
+        padding: 0px 15%;
     }
   }
 

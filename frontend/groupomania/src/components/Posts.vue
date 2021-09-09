@@ -6,9 +6,7 @@
         <span class="like-counter">0</span>
         <button class="disllike">Dislike</button>
         <span class="dislike-counter">0</span>
-        <Comments/>
-       
-       
+        <Comments/>   
     </div>
    
 </template>
@@ -32,7 +30,7 @@ export default {
     
 .post{
     background-color: rgb(156, 180, 223);
-    width: 520px;
+    width: 100%;
     height: 320px;
     padding: 5px 20px;
     border-radius: 10px;
