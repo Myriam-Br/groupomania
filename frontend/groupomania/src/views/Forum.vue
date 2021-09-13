@@ -1,6 +1,6 @@
 <template>
-  <div class="forum">
-       <div class="container"> 
+  <div class="container">
+       <div class="forum"> 
       <Posts :post="post" v-for="post in postSample" :key="post"/>
       </div>
   </div>
@@ -34,11 +34,11 @@ export default {
 
 <style lang="scss" scoped>
 
-  .forum{
+  .container{
     display: flex;
     flex-direction: column;
     padding-bottom: 60px;
-    .container{
+    .forum{
         display: flex;
         flex-direction: column;   
         padding: 0px 15%;

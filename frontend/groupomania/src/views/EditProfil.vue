@@ -1,16 +1,16 @@
 <template>
 <div>
-    <div class="profil-user">
+    <div class="container profil-user">
     <h1>Edit profil</h1>
-    <div class="profil-info">
-        <img class="image-profil-preview" :src="imageProfilPreview" alt="picture" @click="openUpload">
-        <input type="file" name="profil-pic" id="profil-pic" @change="updatedPreview">
-        <input type="text"> 
-        <input type="text"> 
-        <button>apply changes</button>  
+        <div class="profil-info">
+            <img class="image-profil-preview" :src="imageProfilPreview" alt="picture" @click="openUpload">
+            <input type="file" name="profil-pic" id="profil-pic" @change="updatedPreview">
+            <input type="text"> 
+            <input type="text"> 
+            <button>apply changes</button>  
+        </div>
+        <button class="delete">Delete account</button>    
     </div>
-    
-</div>
 </div>
   
 </template>
@@ -52,8 +52,7 @@ export default {
 .profil-user{
     
     width: 100%;
-    background-color: brown;
-   
+ 
     h1{
         text-align: center;
     }

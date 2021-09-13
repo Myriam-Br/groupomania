@@ -41,5 +41,13 @@ li{
     color: black;
     cursor: pointer;
 }
+button {
+  background-color: rgb(208, 227, 236);
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 8px 0px rgba(0, 0, 0, 0.609);
+  cursor: pointer;
+}
 
 </style>

@@ -6,8 +6,8 @@
       <ul class="navigation-links">
         <router-link class="link" :to="{ name : 'forum'}">Forum</router-link>
         <router-link class="link" :to="{ name : 'createpost'}">Create Post</router-link>
-        <router-link  @mouseover="hover = true"  @mouseleave="hover = false"  class="link profil" :to="{ name : 'profil'}">Profil</router-link>
-        <ProfilDropDown v-if="hover" class="profildropdown"/>
+        <router-link class="link profil" :to="{ name : 'account'}">Account</router-link>
+        <router-link class="link profil" :to="{ name : '#'}">Sign out</router-link> 
       </ul>
     </div>
   </div>
@@ -15,16 +15,16 @@
 </template>
 
 <script>
-import ProfilDropDown from "../components/ProfilDropDown.vue"
+
 export default {
   name: 'navigationProfil', 
   components :{
-      ProfilDropDown
+
   },
 
   data() {
       return{
-        hover: true,
+      
       }
   },
 
@@ -48,11 +48,12 @@ export default {
       margin-right: 20px;
     }  
   
-    .profildropdown{
-        
+    .profil-dropdown{ 
         position: absolute;
         right: 0;
-        display: none;
+        display: flex;
+        flex-direction: column;
+        background-color: bisque;
     }
    
   }

@@ -1,5 +1,5 @@
 <template>
-<div class="createpost">
+<div class="container createpost">
     <h1>CREATE A POST</h1>
     <div class="newpost">
         <UploadGIF/>

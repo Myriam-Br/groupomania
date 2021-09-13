@@ -1,12 +1,14 @@
-
-
-
-
-dbConnect.query(
-    'SELECT * FROM `user`',
-    function(err, results, fields) {
-      console.log(results); // results contains rows returned by server
-      console.log(fields); // fields contains extra meta data about results, if available
-    }
-  );
+const mysql = require('mysql2');
+const dbConnect = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    database: 'testdb'
+});
+dbConnect.connect((err) => {
+  if (err) {
+    throw err
+  };
+  console.log('MySql connected successfully');
+});
   
+module.exports = dbConnect;

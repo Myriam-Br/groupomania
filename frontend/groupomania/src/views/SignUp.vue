@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container signup-in-up">
       <h1>SIGN UP</h1>
       <div class="form-signup">
         <label for="firstname">First Name</label>

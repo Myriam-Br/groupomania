@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Forum from '../views/Forum.vue';
 import CreatePost from '../views/CreatePost.vue';
-import Profil from '../views/Profil.vue';
+import Account from '../views/Account.vue';
 import EditProfil from '../views/EditProfil.vue';
 import SignUp from '../views/SignUp.vue';
 import SignIn from '../views/SignIn.vue';
@@ -28,9 +28,9 @@ const routes = [
     component: CreatePost
   },
   {
-    path: "/profil",
-    name: "profil",
-    component: Profil
+    path: "/account",
+    name: "account",
+    component: Account
   },
   {
     path: "/editprofil",

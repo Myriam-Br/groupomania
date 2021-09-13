@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container signup-in-up">
       <h1>SIGN IN</h1>
       <div class="form-signin">
         <label for="username">Username</label>
@@ -17,8 +17,6 @@
            Forgot your password?
         <router-link class="link link-to-resetpw" :to="{ name : 'forgotpassword'}">Reset password</router-link>
       </p>
-    
-       
   </div>
 </template>
 
