@@ -2,23 +2,17 @@ const express = require('express');
 const router = express.Router();
 const userCtrl = require('../controllers/user');
 
-//get user list
-router.get('/', userCtrl.getUserList);
+//get all users
+router.get('/', userCtrl.usersList)
 
-//get user by id
-router.get('/:id', userCtrl.getUserById);
+//create new account
+router.post('/register', userCtrl.register);
 
-//create new user 
-router.post('/', userCtrl.createNewUser);
+//login to account
+router.post('/login', userCtrl.login);
 
-//update user
-router.put('/:id', userCtrl.updateUser)
-
-//delete user 
-router.delete('/:id', userCtrl.deleteUser);
-
-
-
+//login to account
+router.delete('/:id', userCtrl.deleteAccount);
 
 
 module.exports = router;

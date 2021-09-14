@@ -1,71 +1,103 @@
+const dbConnect = require('../database');
 const User = require('../models/User');
+const bcrypt = require('bcrypt')
 
 
-//get user list
-exports.getUserList = (req, res) => {
-    //console.log('here all users');
-
-    User.getAllUsers((err, users) => {
-        if(err)
-        res.send(err);
-        console.log('Users', users);
-        res.send(users);
+exports.usersList = (req, res) => {
+    dbConnect.query('SELECT * FROM user', (error, result) => {
+        if(error) {
+            res.json({
+                status: false, 
+                message: 'there are some error with query'})
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'user list fetched successfully'})
+        }     
     })
 }
 
-//get user by id
-exports.getUserById = (req, res) => {
-    User.getUserByID(req.params.id, (err, user) => {
-        if(err)
-        res.send(err);
-        console.log('Users', user);
-        res.send(user);
+
+exports.register = (req, res) => {
+    //var today = new Date();
+    const pwdRe =  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+    //if(users.password.match(pwdRe))
+        //var hashedPwd = bcrypt.hash(users.password, 10);
+        var users = new User({
+            username : req.body.username,
+            email : req.body.email,
+            password : req.body.password,
+            bio : req.body.bio,
+            isAdmin : req.body.isAdmin,
+        });    
+
+        if(users.password.match(pwdRe)){
+            //users.password = bcrypt.hash(users.password, 10);
+            console.log('pwd available');
+            dbConnect.query('INSERT INTO user SET ?', users, (error, result) =>{
+                if(error) {
+                    res.json({
+                        status: false, 
+                        message: 'there are some error with query'})
+                }else {
+                        res.json({
+                            status: true,
+                            data: result,
+                            message : 'account created successfully'}) 
+                           // console.log(result);       
+                }          
+            })
+        } else{
+            console.log('pwd too short');
+            res.status(400).json({
+                message: 'pwd too short...'
+            })
+        }
+       
+        
+} 
+
+exports.login = (req, res) => {
+    var email = req.body.email;
+    var password = req.body.password;
+    dbConnect.query('SELECT * FROM user WHERE email=?', email, (error, result) => {
+        if (error) {
+            res.json({
+              status:false,
+              message:'there are some error with query'
+              })
+        }else{
+            if(result.length > 0){
+                if(password==result[0].password){
+                    res.json({
+                        status:true,
+                        message:'successfully authenticated'
+                    })
+                }else{
+                    res.json({
+                        status:false,
+                        message:"Email and password does not match"
+                    });
+                }           
+            }
+          else{
+            res.json({
+                status:false,    
+                message:"Email does not exits"
+            });
+          }
+        }        
     })
- 
 }
 
-// create new employee
-exports.createNewUser = (req, res) =>{
-    const pwdRe =   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
-    const userReqData = new User(req.body);
-    console.log(userReqData.password);
-
-        if(userReqData.password.match(pwdRe)) {
-            console.log('account data', userReqData);
-            User.createUser(userReqData, (err, user) => {
-                if(err)
-                res.send(err);
-                console.log('Users', user);
-                res.send(user);
-            })
-        } else {
-            res.status(400).send({message: 'password between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character '})
-        }
-}
-
-exports.updateUser = (req, res) => {
-    const pwdRe =   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
-    const userReqData = new User(req.body);
-    console.log(userReqData.password);
-
-        if(userReqData.password.match(pwdRe)) {
-
-            console.log('account data updated', userReqData);
-            User.updateUserAcc(req.params.id , userReqData, (err, user) => {
-                if(err)
-                res.send(err);
-                res.json({status: true, message: 'account updated succesfully ', data: user});
-            })
-        } else {
-            res.status(400).send({message: 'password between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character '})
-        }
-}
-
-//delete user
-exports.deleteUser =(req, res) => {
-    User.deleteUserByID(req.params.id, (err, user) => {
-        if(err)
-        res.send(err);
-        res.json({success: true, message: 'account deteled successfully!'});
+exports.deleteAccount = (req, res) => {
+    dbConnect.query('DELETE FROM user WHERE id=?', req.params.id, (error, resultat) => {
+        if(error)
+        res.send(err)
+        res.json({
+            status:true,
+            message:"Account deleted successfully"
+        });
     })
 }

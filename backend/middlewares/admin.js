@@ -1,11 +1,11 @@
 const jwt = require ('jsonwebtoken');
 
 module.exports = {
-    generateTokenForUser(userData) {
+    generateTokenForUser(userReqData) {
         return jwt.sign(
             { 
-                userId: userData._id ,
-                isAdmin: userData.isAdmin
+                userId: userReqData._id ,
+                isAdmin: userReqData.isAdmin
             },
             'RANDOM_TOKEN_SECRET',
             { 
