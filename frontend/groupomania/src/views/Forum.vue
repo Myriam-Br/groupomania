@@ -1,34 +1,37 @@
 <template>
   <div class="container">
+      <h1>FORUM PAGE</h1>
        <div class="forum"> 
-      <Posts :post="post" v-for="post in postSample" :key="post"/>
+      <PostCard />
       </div>
+      <span>{{info}}</span>
   </div>
 </template>
 
 <script>
-import Posts from "../components/Posts.vue";
+import axios from 'axios';
+import PostCard from "../components/Posts";
+
+
 export default {
     name:"forum",
     components:{
-      Posts,
+      PostCard,
+    },
+    
+    date() {
+      return {
+        info: null,
+      }
     },
 
-    data(){
-      return {
-        postSample: [
-          {
-            title: "my first post",
-            imageUrl: "my first post image",
-          },
-          {
-            title: "my second post",
-            imageUrl: "my second post image",
-          }
-        ]
-      }
+    mounted () {
+     axios
+     .get('/publication')
+     .then(response => (this.info = response.data))
     }
 
+     
 }
 </script>
 
@@ -42,6 +45,12 @@ export default {
         display: flex;
         flex-direction: column;   
         padding: 0px 15%;
+    }
+
+    .publication{
+      border: 2px solid black;
+      height: 10px;
+      margin-bottom: 6px;
     }
   }
 

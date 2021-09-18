@@ -1,23 +1,30 @@
 <template>
   <div id="app">
-    <NavigationProfil/>
-    <Navigation/>
-    <Footer/>
-    <router-view/>
+    <header>
+      <NavigationProfil/>
+      <Navigation/>
+    </header>  
+    <router-view class="view-container"></router-view>
+    <div>
+      <Footer/>
+    </div>
   </div>
 </template>
 
 <script>
-import NavigationProfil from "./components/NavigationProfil.vue";
-import Navigation from "./components/Navigation.vue";
-import Footer from "./components/Footer.vue";
+import NavigationProfil from "./components/NavigationProfil";
+import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
+
+
 export default {
   name: "app",
   components:{
     Footer,
     NavigationProfil,
-    Navigation
-  }
+    Navigation,
+  },
+  
 }
 </script>
 
@@ -27,6 +34,7 @@ body{
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   padding: 0;
   margin: 0;
+  background-color: rgb(234, 244, 245);
   
 }
 #app{
@@ -49,5 +57,9 @@ button {
   box-shadow: 1px 1px 8px 0px rgba(0, 0, 0, 0.609);
   cursor: pointer;
 }
+.view-container{
+
+}
+
 
 </style>

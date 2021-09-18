@@ -1,13 +1,14 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
-import Forum from '../views/Forum.vue';
-import CreatePost from '../views/CreatePost.vue';
-import Account from '../views/Account.vue';
-import EditProfil from '../views/EditProfil.vue';
-import SignUp from '../views/SignUp.vue';
-import SignIn from '../views/SignIn.vue';
-import ForgotPassword from '../views/ForgotPassword.vue';
+import Home from '../views/Home';
+import Forum from '../views/Forum';
+import CreatePost from '../views/CreatePost';
+import Account from '../views/Account';
+import EditProfil from '../views/EditProfil';
+import SignUp from '../views/SignUp';
+import SignIn from '../views/SignIn';
+import ForgotPassword from '../views/ForgotPassword';
+
 
 Vue.use(VueRouter)
 

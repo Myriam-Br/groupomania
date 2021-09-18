@@ -2,7 +2,6 @@
 <div class="container profil-user">
     <h1>MY PROFIL</h1>
     <div class="profil-info">
-        <img class="profil-pic" src="" alt="">
         <p class="username">Username</p>
         <p class="bio">Bio</p>
     </div>

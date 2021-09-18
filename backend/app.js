@@ -19,10 +19,10 @@ const userRoutes = require('./routes/user');
 //import publication list
 const publicationRoutes = require('./routes/publication');
 //import rating list
-const ratingRoutes = require('./routes/rating');
+const commentsRoutes = require('./routes/comments');
+//import rating list
+const likesRoutes = require('./routes/likes');
 
-//import userAlt 
-const usersAltRoutes = require('./routes/user')
 
 app.get('/', (req,res) => {
   res.send('Hello world');
@@ -35,8 +35,11 @@ app.use('/api/users', userRoutes );
 //create publication routes
 app.use('/api/publication', publicationRoutes);
 
-//create rating routes
-app.use('/api/rating', ratingRoutes);
+//create comments routes
+app.use('/api/comments', commentsRoutes);
+
+//create likes routes
+app.use('/api/likes', likesRoutes);
 
 
 

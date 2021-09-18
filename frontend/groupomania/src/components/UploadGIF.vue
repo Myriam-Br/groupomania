@@ -3,21 +3,24 @@
     <h2></h2>
     <div class="gif-container">
         <div class="gif-description">
-            <textarea class="description"></textarea>
+            <input class="publication_title" type="text" v-model="title_publication">
         </div>
 
         <div class="gif-image">
-            <img :src="imagePreview" class="preview-image" alt="giftoshare" @click="openUpload">
-            <input type="file" name="mygif" id="mygif" @change="updatedPreview">
+           <input type="file" @change="onFileSlected">
+           <input type="text" class="image">
         </div>
 
-        <button @click="btnSubmit" class="btn-create">Submit</button>
-       
+        <div class="gif-date">
+            <p class="created_at">{{this.create_at}}</p>
+        </div>
+        <button @click="onUpload"  class="btn-create">Submit</button>   
     </div>  
 </div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     name: "mygif",
     components: {
@@ -25,34 +28,37 @@ export default {
     },
     data() {
         return {
-            imagePreview: null,
-            description: null,
+            title_publication: null,
+            //selected_file: null,
+            //imagetest : null,
+            create_at: new Date(),
+
         }
     },
 
     methods: {
-        openUpload() {
-            document.getElementById('mygif').click()
+        onFileSlected(event) {
+            console.log(event);
+            this.selected_file = event.target.files[0] //file that we've uploaded
+            console.log(event.target.files[0]);
         },
 
-        updatedPreview(e) {
-            var reader, files = e.target.files
-            if(files.length === 0){
-                console.log('empty');
-            }
-            reader = new FileReader()
+        onUpload(){
+            const fd = new FormData();
+            fd.append('image', this.selected_file, this.selected_file.name);
+            console.log(fd);
 
-            reader.onload = (e) => {
-                this.imagePreview = e.target.result
-            }
-            reader.readAsDataURL(files[0])
-
+            axios.post('/publication/' , {
+                userID: 31,
+                title: this.title_publication,
+                imageUrl : fd,
+                created_at : new Date()
+            }) 
+            .then(
+                res => console.log(res)
+            )
         },
-
-        btnSubmit() {
-            alert('je fonctionne');
-
-        }
+     
     }
 
 }
@@ -61,6 +67,7 @@ export default {
 <style lang="scss" scoped>
 
 .upload-gif{
+
     .gif-container {
         display: flex;
         flex-direction: column;
@@ -75,8 +82,9 @@ export default {
             margin-bottom: 5px;
             width: 100%;
             border-bottom: solid black 1px;
-            .description {
+            .publication_title {
                 height: 30px;
+                width: 99%;
                 border-top-left-radius: 5px;
                 border-top-right-radius: 5px;
                 resize: none;
@@ -90,24 +98,28 @@ export default {
         .gif-image {
 
             .preview-image{
-            width: 400px;
-            height: 200px;
+            width: 100%;
+            height: auto;
             border-radius: 5px;
             object-fit: scale-down;
             }
-            #mygif{
+            #publication_gif{
                 display: none;
             }
         }
 
         .btn-create{
-            border-radius: none;
-            border: none;
             width: 60px;
-            height: 30px;  
+            height: 30px;
+            padding: 3px;
+            box-shadow: none;
+            background-color: rgb(21, 55, 148);
+            color: white;
+            font-weight: 400;
+            font-size: 16px;
             position: absolute;
-            bottom: 0;
             right: 0;
+            bottom: 0;
 
         }
     }

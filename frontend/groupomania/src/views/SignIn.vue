@@ -1,14 +1,14 @@
 <template>
     <div class="container signup-in-up">
       <h1>SIGN IN</h1>
-      <div class="form-signin">
-        <label for="username">Username</label>
-        <input type="text" class="username" v-model="username">
+      <form @submit.prevent="login" class="form-signin">
+        <label for="email">Email</label>
+        <input type="text" class="email" v-model="email">
         <label for="password">Password</label>
-        <input type="password" class="password" v-model="password">
-      </div>
-      <button class="btn-signin" @click="login">Sign In</button>
-      <div class="error" v-if="error">{{this.errorMsg}}</div>
+        <input type="password" class="password" v-model="password">  
+        <button  @click="login" class="btn-signin">Sign In</button>
+      </form>
+      <div class="error"></div>
       <p class="signup-msg">
         Don't have an account? 
         <router-link class="link link-to-signup" :to="{ name : 'signup'}">Sign up</router-link>  
@@ -17,37 +17,38 @@
            Forgot your password?
         <router-link class="link link-to-resetpw" :to="{ name : 'forgotpassword'}">Reset password</router-link>
       </p>
+
+
   </div>
 </template>
 
-<script>
+<script >
+import axios from 'axios';
 export default {
     name: "signin",
    
     data() {
         return{
-          username: null,
-          password: null,
-          error: null,
-          errorMsg: "",
+          email: '',
+          password: '',
         };
     },
-
+  
     methods: {
-        login() {
-            if(this.username !== "" || this.password !== "" ) {
-                this.error = false;
-                this.errorMsg= "";  
-                this.$router.push('forum') 
-            }   
-            
-            this.error = true;
-            this.errorMsg = "Please fill out all the fields";        
-        },
+        async login() {
+           const response = await axios.post('/users/login', {
+               email: this.email,
+               password: this.password
+           });
+           if(response.data.status==true) {
+                this.$router.push('/account');          
+           } else{
+               console.log('ERROR');
+           }
+        //console.log(response.data.status);
+            console.log(response);
+        }
     }
-    
-
- 
 }
 </script>
 

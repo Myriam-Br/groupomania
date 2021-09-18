@@ -1,56 +1,89 @@
+const dbConnect = require('../database');
 const Publication = require('../models/Publication');
+//const multer = require('../middlewares/multer_config')
 
-
-// get all publications 
-exports.getPublicationList = (req, res) => {
-
-    Publication.getAllPublications((err, publications) => {
-        if(err)
-        res.send(err);
-        console.log('Publication', publications);
-        res.send(publications);
-
+//imageUrl:`${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+//publication list
+exports.publicationsList = (req, res) => {
+    dbConnect.query('SELECT * FROM publication', (error, result) => {
+        if(error) {
+            res.json({
+                status: false, 
+                message: 'there are some error with query'})
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'publication list fetched successfully'})
+        }     
     })
 }
 
-// get publication by id
-exports.getPublicationById = (req, res) => {
-
-    Publication.getPublicationByID(req.params.id, (err, publications) => {
-        console.log("we're here");
-        if(err)
-        res.send(err);
-        console.log('Publication', publications);
-        res.send(publications);
-
+//publication by id
+exports.publicationsById = (req, res) => {
+    dbConnect.query('SELECT * FROM publication WHERE id=?', req.params.id, (error, result) => {
+        if(error) {
+            res.json({
+                status: false, 
+                message: 'there are some error with query'})
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'publication fetched successfully'})
+        }     
     })
 }
 
-//create new publication
-exports.createNewPublication = (req, res) => {
-    const publicationReqData = new Publication(req.body);
 
+//create publication
+exports.createPublication = (req, res) => {
 
-    Publication.createPublication(publicationReqData, (err, publication) => {
-        if(err)
-        res.send(err);
-        res.send(publication)
+    const publication = new Publication(req.body); 
+
+    //console.log('user', publication.userID);
+  
+    dbConnect.query('INSERT INTO publication SET ?', publication, (error, result) => {
+        if(error) {
+            res.json({
+                status: false, 
+                message: 'there are some error with query'})
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'publication created successfully'})
+        }     
+    })
+   
+}
+
+//update publication
+exports.updatePublication = (req, res) => {
+    var publications = new Publication(req.body);
+    dbConnect.query('UPDATE publication SET userID=?,title=?,imageUrl=?,created_at=? WHERE id=?', req.params.id, publications, (error, result) => {
+        if(error) {
+            res.json({
+                status: false, 
+                message: 'there are some error with query'})
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'publication updated successfully'})
+        }    
     })
 }
-exports.updatePublicationById = (req, res) => {
-    const publicationReqData = new Publication(req.body);
-    Publication.updatePublication(req.params.id , publicationReqData, (err, publication) => {
-        if(err)
-        res.send(err);
-        res.json({status: true, message: 'account updated succesfully ', data: publication});
-    })        
-}
+
 
 //delete publication
 exports.deletePublication = (req, res) => {
-    Publication.deletePublicationById(req.params.id, (err, publication) => {
-        if(err)
-        res.send(err);
-        res.json({success: true, message: 'publication deteled successfully!', data: publication});
+    dbConnect.query('DELETE FROM publication WHERE id=?', req.params.id, (error, result) => {
+        if(error)
+            res.send(err)
+            res.json({
+                status:true,
+                message:"Publication deleted succesfully"
+            })
     })
 }

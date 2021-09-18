@@ -1,7 +1,11 @@
 <template>
   <header>
    <div class="navigation">
-     <router-link class="logo link" :to="{ name : 'home'}">GROUPOMANIA</router-link>
+     <router-link class="logo link" :to="{ name : 'home'}">
+       <router-link class="logo link" :to="{ name : 'home'}">
+
+    </router-link>
+     </router-link>
     <div class="menu">
       <ul class="navigation-links">
         <router-link class="link" :to="{ name : 'forum'}">Forum</router-link>
@@ -15,18 +19,13 @@
 </template>
 
 <script>
-
+//import Logo from "../assets/icon-left-font-monochrome-white.svg";
 export default {
   name: 'navigationProfil', 
   components :{
-
+   
   },
 
-  data() {
-      return{
-      
-      }
-  },
 
 }
 </script>
@@ -34,7 +33,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .navigation{
-  background-color: rgb(187, 218, 236);
+  background-color: rgb(46, 53, 58);
   display: flex;
   justify-content: space-between;
   position: relative;
@@ -46,6 +45,7 @@ export default {
   .navigation-links{
     .link{
       margin-right: 20px;
+      color: white;
     }  
   
     .profil-dropdown{ 

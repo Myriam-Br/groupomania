@@ -9,7 +9,8 @@
 </template>
 
 <script>
-import UploadGIF from "../components/UploadGIF.vue"
+
+import UploadGIF from "../components/UploadGIF"
 export default {
     name:"createpost",
     components: {

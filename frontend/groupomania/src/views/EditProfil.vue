@@ -3,10 +3,10 @@
     <div class="container profil-user">
     <h1>Edit profil</h1>
         <div class="profil-info">
-            <img class="image-profil-preview" :src="imageProfilPreview" alt="picture" @click="openUpload">
-            <input type="file" name="profil-pic" id="profil-pic" @change="updatedPreview">
-            <input type="text"> 
-            <input type="text"> 
+            <label for="username">Username</label>
+            <input type="text" id="username">
+            <label for="bio">Bio</label>
+            <input type="text" id="bio"> 
             <button>apply changes</button>  
         </div>
         <button class="delete">Delete account</button>    

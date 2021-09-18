@@ -1,12 +1,8 @@
 <template>
   <div class="container signup-in-up">
       <h1>SIGN UP</h1>
-      <div class="form-signup">
-        <label for="firstname">First Name</label>
-        <input type="text" class="firstname" v-model= "firstname">
 
-        <label for="lastname">Last Name</label>
-        <input type="text" class="lastname" v-model= "lastname">
+      <form @submit.prevent="register" class="form-signup">
 
         <label for="username">Username</label>
         <input type="text" class="username" v-model= "username">
@@ -16,10 +12,12 @@
 
         <label for="password">Password</label>
         <input type="password" class="password" v-model= "password">
-      </div>
-      <button @click="register"  class="btn-signup">Sign up</button>
 
-      <div class="error" v-if="error">{{this.errorMsg}}</div>
+        <button @click="register"  class="btn-signup">Sign up</button>
+      </form>
+      
+
+      <div class="error"></div>
       <p class="signin-msg">
         Already have an account?
         <router-link class="link link-to-signin" :to="{ name : 'signin'}">Sign in</router-link>
@@ -28,41 +26,40 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
     name: "signup",
 
     data(){
       return{
-          firstname: null,
-          lastname: null,
-          username: null,
-          email: null,
-          password: null,
-          error: null,
-          errorMsg: "",
+          username: '',
+          email: '',
+          password: '',
       };
     },
-
     methods: {
-        register() {
-            if(this.firstname !== "" || this.lastname !== "" || this.username !== "" || this.email !== "" || this.password !== "" ) {
-                this.error = false;
-                this.errorMsg= "";  
-            }   
-            
-            this.error = true;
-            this.errorMsg = "Please fill out all the fields";        
-        },
+          async register() { 
+            //send request
+            const response =  await axios.post('users/register', {
+              username: this.username,
+              email: this.email,
+              password : this.password,
+            }); 
+            console.log(response);
+        
+            this.$router.push('/signin')
+              
+          } 
     }
-
-
 }
+
 </script>
 
 <style lang="scss" scoped>
 .container{
     padding: 20px 20px;
     margin-top: 20px;
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;

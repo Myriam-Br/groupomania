@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Modal from "../components/Modal.vue";
+import Modal from "../components/Modal";
 export default {
     name: "forgotpassword",
     
