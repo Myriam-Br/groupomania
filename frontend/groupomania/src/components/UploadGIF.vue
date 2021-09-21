@@ -7,8 +7,9 @@
         </div>
 
         <div class="gif-image">
-           <input type="file" @change="onFileSlected">
+           <input type="file" @change="uploadImage">
            <input type="text" class="image">
+           <img :src="preview"  height="200" class="preview" alt="">
         </div>
 
         <div class="gif-date">
@@ -29,29 +30,33 @@ export default {
     data() {
         return {
             title_publication: null,
-            //selected_file: null,
-            //imagetest : null,
+            selected_file: null,
+            preview: null,
             create_at: new Date(),
 
         }
     },
 
     methods: {
-        onFileSlected(event) {
-            console.log(event);
-            this.selected_file = event.target.files[0] //file that we've uploaded
-            console.log(event.target.files[0]);
-        },
+        uploadImage(event) {
+            const image = event.target.files[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(image);
+            reader.onload = (e) => {
+            this.preview = e.target.result;
+            };
+        }, 
 
         onUpload(){
-            const fd = new FormData();
-            fd.append('image', this.selected_file, this.selected_file.name);
-            console.log(fd);
+            /*const fd = new FormData();
+            fd.append('image',this.selected_file.name);
+            console.log(fd);*/
+  
 
             axios.post('/publication/' , {
-                userID: 31,
+                userID: 57,
                 title: this.title_publication,
-                imageUrl : fd,
+                imageUrl : this.preview,
                 created_at : new Date()
             }) 
             .then(

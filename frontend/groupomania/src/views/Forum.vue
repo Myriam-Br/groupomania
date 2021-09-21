@@ -2,15 +2,21 @@
   <div class="container">
       <h1>FORUM PAGE</h1>
        <div class="forum"> 
-      <PostCard />
+         <div class="publication">
+            <PostCard v-for="(publication, index) in this.publications " :key="index" :publication="publication"/>
+         </div>
+    
       </div>
       <span>{{info}}</span>
+      <span>{{test}}</span>
+      <span>{{likes}}</span>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import PostCard from "../components/Posts";
+//import { response } from 'express';
 
 
 export default {
@@ -19,16 +25,42 @@ export default {
       PostCard,
     },
     
-    date() {
+    data() {
       return {
         info: null,
+        test: null,
+        title: null,
+        data: null,
+        likes: null
       }
     },
 
-    mounted () {
-     axios
-     .get('/publication')
-     .then(response => (this.info = response.data))
+
+    mounted() {
+      axios
+      .get('/publication')
+      .then(
+        response => {
+          this.publications = response.data.data,
+          this.info = response.data.data[8],
+          this.title = response.data.data[8].title
+          console.log('publication by ID',this.publications.id);
+        }    
+      )
+  
+      axios     
+      .get('/likes/' ,{
+        params: {
+          publicationID : 9
+        }
+      })
+      .then(
+        response => {
+          this.likes = response.data.data
+          console.log(this.likes)
+        }       
+      )
+       
     }
 
      

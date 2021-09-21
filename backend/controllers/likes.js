@@ -19,6 +19,22 @@ exports.getAllLikes = (req, res) => {
     })
 }
 
+exports.getLikeByPublicationID = (req, res) => {
+    var publicationID = req.params.publicationID;
+    dbConnect.query('SELECT * FROM likes WHERE publicationID=? ', publicationID, (error, result) => {
+        if(error) {
+            res.json({
+                status: false, 
+                message: 'there are some error with query'})
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'likes by publicationID fetched successfully'})
+        }   
+    })
+}
+
 exports.getLikesTotal = (req, res) => {
     console.log('RECUP ID PUBLICATION:', req.params.publicationID);
     var publicationID = req.params.publicationID;
@@ -54,6 +70,7 @@ exports.getDislikesTotal = (req, res) => {
         }    
     })
 }
+
 
 exports.likePublication =  (req, res) => {
     var likes = new Likes(req.body)
@@ -102,6 +119,55 @@ exports.likePublication =  (req, res) => {
         })
     }
 }
+
+/*
+exports.sendLike = (req, res) => {
+  
+    var userLiked = {
+        userID: req.body.userID,
+        publicationID:req.params.publicationID,
+        like_user: 1,
+        dislike_user: 0,
+    };
+  
+    dbConnect.query('INSERT INTO likes SET ?',  userLiked, (error, result) => {
+        if(error) {
+            res.json({
+                status: false, 
+                message: 'there are some error with query'})
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'like added to publication successfully'})
+        }    
+    })
+}
+
+exports.sendDislike = (req, res) => {
+  
+    var userDisliked = {
+        userID: req.body.userID,
+        publicationID:req.params.publicationID,
+        like_user: 0,
+        dislike_user: 1,
+    };
+  
+    dbConnect.query('INSERT INTO likes SET ?',  userDisliked, (error, result) => {
+        if(error) {
+            res.json({
+                status: false, 
+                message: 'there are some error with query'})
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'dislike added to publication successfully'})
+        }    
+    })
+}*/
+
+
 
 exports.deleteLikeDislike = (req, res) => {
     var publicationID = req.params.publicationID;

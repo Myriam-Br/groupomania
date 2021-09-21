@@ -19,7 +19,7 @@ exports.getComments = (req, res) => {
 
 exports.createComment = (req, res) => {
     
-    var comment = new Comments(req.body);
+    const comment = new Comments(req.body);
 
     dbConnect.query('INSERT INTO comments SET ?', comment, (error, result) => {
         if(error){

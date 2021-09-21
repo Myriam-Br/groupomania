@@ -2,8 +2,18 @@ const express = require('express');
 const router = express.Router();
 const userCtrl = require('../controllers/user');
 
+
 //get all users
 router.get('/', userCtrl.usersList)
+
+//get all users
+router.get('/', userCtrl.usersList)
+
+//get users login
+router.get('/login',  userCtrl.loginAuth)
+
+//get users login
+router.get('/logout',  userCtrl.logout)
 
 //create new account
 router.post('/register', userCtrl.register);

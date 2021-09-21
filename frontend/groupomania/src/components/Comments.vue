@@ -1,10 +1,10 @@
 <template>
   <div class="comment-container">  
       <div class="white-container">
-            <ul class="list-coms">
-                <li>Content comment</li>
-                <li>Content comment</li>
-            </ul>
+            <div class="coms">
+                <p>username:</p>
+                <p>comment</p>
+            </div>
             <textarea class="comment-field"></textarea>
         </div>
 
@@ -37,17 +37,7 @@ export default {
 
     methods: {
         sendComment() {  
-            if(this.comment !== null){
-            var commentaire = this.comment;
-            this.userComs.push(commentaire); 
-            }
-            console.log(this.userComs.length);
-            console.log(this.userComs);
-            this.userComs.forEach(element => {
-                console.log(element);
-            });
-            console.log(document.getElementsByClassName('comments'));
-            console.log(document.createElement('div'));           
+                  
         }
 
     }
@@ -65,9 +55,16 @@ export default {
         .white-container {
            border: solid black 2px;
             
-            .list-coms{
+            .coms{
                 height: auto;
-                padding: 15px 5px;
+                display: flex;
+                background-color: azure;
+                margin-bottom: 5px;
+                margin-top: 5px;
+                p{
+                    margin-right: 10px;
+                    font-size: 16px;
+                }
             }
 
             .comment-field{
@@ -93,7 +90,6 @@ export default {
             color: white;
             font-weight: 400;
             font-size: 16px;
-            float: right;
         }
 }
 </style>
