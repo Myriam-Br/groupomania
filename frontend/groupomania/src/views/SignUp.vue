@@ -45,6 +45,7 @@ export default {
               email: this.email,
               password : this.password,
             }); 
+
             console.log(response);
         
             this.$router.push('/signin')
@@ -64,15 +65,14 @@ export default {
     flex-direction: column;
     justify-content: center;
 
-    h1{
-      text-align: center;
-    }
+    
 
     .form-signup{
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      margin-bottom: 20px;
 
         input{
             width: 300px;

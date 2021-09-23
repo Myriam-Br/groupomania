@@ -5,6 +5,8 @@ const Publication = require('../models/Publication');
 //imageUrl:`${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
 //publication list
 exports.publicationsList = (req, res) => {
+    console.log('session check',req.session);
+    console.log('headers check', req.headers);
     dbConnect.query('SELECT * FROM publication', (error, result) => {
         if(error) {
             res.json({
@@ -39,9 +41,16 @@ exports.publicationsById = (req, res) => {
 //create publication
 exports.createPublication = (req, res) => {
 
-    const publication = new Publication(req.body); 
-
-    //console.log('user', publication.userID);
+    const publication = new Publication({
+        userID : req.body.userID,
+        title : req.body.title,
+        imageUrl : req.file,
+        created_at : new Date()
+    }); 
+    
+    console.log(publication);
+   
+    console.log( 'img:',req.file);
   
     dbConnect.query('INSERT INTO publication SET ?', publication, (error, result) => {
         if(error) {
@@ -61,7 +70,7 @@ exports.createPublication = (req, res) => {
 //update publication
 exports.updatePublication = (req, res) => {
     var publications = new Publication(req.body);
-    dbConnect.query('UPDATE publication SET userID=?,title=?,imageUrl=?,created_at=? WHERE id=?', req.params.id, publications, (error, result) => {
+    dbConnect.query('UPDATE publication SET userID=?,title=?,created_at=? WHERE id=?', req.params.id, publications, (error, result) => {
         if(error) {
             res.json({
                 status: false, 

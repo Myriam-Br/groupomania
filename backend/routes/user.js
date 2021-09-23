@@ -18,6 +18,9 @@ router.get('/logout',  userCtrl.logout)
 //create new account
 router.post('/register', userCtrl.register);
 
+//create new account
+//router.put('/:id', userCtrl.updateAccount);
+
 //login to account
 router.post('/login', userCtrl.login);
 

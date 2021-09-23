@@ -3,7 +3,7 @@ const dbConnect = require('../database');
 var Comments = function(comments) {
     this.userID = comments.userID;
     this.publicationID = comments.publicationID;
-    this.comment = comments.comment_user;
+    this.comment_user = comments.commentaire;
     this.created_at = new Date()
 }
 

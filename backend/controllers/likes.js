@@ -49,6 +49,8 @@ exports.getLikesTotal = (req, res) => {
                 status: true,
                 data: result,
                 message : 'total likes fetched successfully'})
+
+                console.log(result);
         }    
     })
 }
@@ -73,6 +75,7 @@ exports.getDislikesTotal = (req, res) => {
 
 
 exports.likePublication =  (req, res) => {
+    console.log(likes);
     var likes = new Likes(req.body)
     //console.log(req.body);
    console.log(likes.dislike_user);

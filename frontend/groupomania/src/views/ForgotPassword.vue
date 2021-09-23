@@ -56,10 +56,6 @@ export default {
 .container{
     padding: 20px 20px;
     margin-top: 20px;
-
-    h1{
-        text-align: center;
-    }
     .form-resetpw{
     display: flex;
     flex-direction: column;

@@ -3,6 +3,7 @@
     <h1>CREATE A POST</h1>
     <div class="newpost">
         <UploadGIF/>
+
     </div>
 </div>
   
@@ -11,12 +12,12 @@
 <script>
 
 import UploadGIF from "../components/UploadGIF"
+//import TestImg from "../components/TestImg.vue"
 export default {
     name:"createpost",
     components: {
         UploadGIF,
     }
-
 }
 </script>
 

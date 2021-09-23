@@ -16,6 +16,22 @@ exports.getComments = (req, res) => {
         }     
     })
 }
+exports.getCommentByPublication = (req, res) => {
+
+    var publicationID = req.params.publicationID
+    dbConnect.query('SELECT * FROM comments WHERE publicationID=?', publicationID, (error, result) => {
+        if(error) {
+            res.json({
+                status: false, 
+                message: 'there are some error with query'})
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'comments list fetched successfully'})
+        }     
+    })
+}
 
 exports.createComment = (req, res) => {
     

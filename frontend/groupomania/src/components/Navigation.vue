@@ -2,8 +2,7 @@
 <header>
    <div class="navigation">
      
-    <router-link class="logo link" :to="{ name : 'home'}">
-    </router-link>
+    <img :src="mylogoSVG" alt="" class="logo">
     
     <div class="menu">
       <ul class="navigation-links">
@@ -22,7 +21,13 @@ export default {
   name: 'navigation', 
   components: {
    
+  },
+  data() {
+    return {
+       mylogoSVG: require('../assets/icon-left-font-monochrome-white.svg')
+    }
   }
+
 }
 </script>
 
@@ -37,13 +42,14 @@ export default {
 
   .logo{
     margin: 18px 20px;
+    width: 150px;
   }
   .logo-white{
     background-color: aquamarine;
   }
 
   .navigation-links{
-   
+    margin-top: 20px;
     .link{
       margin-right: 20px; 
       color: white;

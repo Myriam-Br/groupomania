@@ -8,13 +8,13 @@ const multer = require('../middlewares/multer_config');
 router.get('/',  publicationCtrl.publicationsList)
 
 //publication list
-router.get('/:id',  publicationCtrl.publicationsById)
+router.get('/:id', publicationCtrl.publicationsById)
 
 //create new publication
-router.post('/',  multer, publicationCtrl.createPublication)
+router.post('/', multer, publicationCtrl.createPublication)
 
 //create new publication
-router.put('/:id',  multer,  publicationCtrl.updatePublication)
+router.put('/:id', multer, publicationCtrl.updatePublication)
 
 //create new publication
 router.delete('/:id', publicationCtrl.deletePublication)

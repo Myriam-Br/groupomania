@@ -25,14 +25,11 @@ exports.usersList = (req, res) => {
 
 
 exports.register = async(req, res) => {
-
-   
-    console.log(errors);
-
+   // console.log(errors);
         const email = req.body.email
         const username = req.body.username
         const password = req.body.password  
-        console.log('pwd field',password);
+        //console.log('pwd field',password);
         const pwdRe =  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
 
         if(password && username && email){
@@ -45,7 +42,7 @@ exports.register = async(req, res) => {
                     username: req.body.username,
                     email: req.body.email,
                     password: hashedPwd,
-                    isAdmin : req.body.isAdmin
+                    isAdmin : 0
                 })
                 dbConnect.query('INSERT INTO user SET ?', users, (error, result) => {
                     if(error) {
@@ -68,31 +65,35 @@ exports.register = async(req, res) => {
                     message: 'pwd too short...'
                 })
             }
-
         }else {
             res.json({
                 code: 403,
                 message: 'Please fill all the fields'
             })
         }
-      
-        
-   
 } 
 
 //recup login method get
 exports.loginAuth = (req, res) => {
-    res.cookie('session_id', '123456');
-    res.json({
-        code:200,
-        message: "Logged In !"
-    })
-
+    console.log(req.session);
+    if(req.session.authentificated) {
+        res.json({
+            code:200,
+            message: "Logged in successfully !",
+            data: req.session,
+        })
+    } else {
+        res.json({
+            message: "Account not logged in!",
+            data: req.session
+        })
+    }
+   
 }
 
 exports.login = async(req, res) => {
     console.log(req.sessionID);
-    console.log(req.sessionID);
+    console.log('payload',req.payload);
     var email = req.body.email;
     var password = req.body.password;
     console.log(password);
@@ -102,11 +103,11 @@ exports.login = async(req, res) => {
     try{
         dbConnect.query('SELECT * FROM user WHERE email=?', [email], async(error, result) => {
             if (error) {
-                res.json({
-                  status: false,
-                  code: 400,
-                  message: 'there are some error with query'
-                  })
+                return  res.json({
+                        status: false,
+                        code: 400,
+                        message: 'there are some error with query'
+                        })
             }else{
                 if(result.length > 0){
                     if(req.session.authentificated){
@@ -114,20 +115,21 @@ exports.login = async(req, res) => {
                     } else{
 
                         const compPwd =  await  bcrypt.compare(password, result[0].password); 
-                        console.log('pwd to compare',result[0].password);
-                        console.log('pwd compare',compPwd);
+                        //console.log('pwd to compare',result[0].password);
+                        //console.log('pwd compare',compPwd);
                         if(compPwd){
-
                             const MYTOKEN = process.env.TOKEN;
                             req.session.authentificated = true;
                             req.session.user = {
-                               email, password
+                               email
                             };
                             res.json({
                                 status: true,
                                 code: 200,
                                 message: 'successfully authenticated',
                                 data: req.session,
+                                userID : result[0].id,
+                                username : result[0].username,
                                 token: jwt.sign (
                                     { userId: result[0].id},
                                     MYTOKEN,
@@ -158,24 +160,45 @@ exports.login = async(req, res) => {
     }   
 }
 
+//modify account
+/*
+exports.updateAccount = (req, res) => {
+       var user = {
+           email: req.body.email,
+           username: req.body.username,
+       }
+       console.log(user);
+        dbConnect.query('UPDATE user SET username=?,email=? WHERE id=?', req.params.id, user, (error, result) => {
+            if(error){
+                res.json({
+                    message:"something went wrong with queries"
+                })
+            } else{
+                res.json({
+                    message:"account updated successfully",
+                    data: result,
+                })
+            }
+        })
+
+}*/
+
 //destroy session
 exports.logout = (req, res) =>{
-   if(req.session){
-       console.log(req.session);
-    req.session.destroy((error)=>{
-        if(error){
-          console.log(error);
-        } else{
+    console.log('before loggout session: ',req.session);
+    req.session.destroy(function(err){
+        if(err){
+           console.log(err);
+        }else{
             res.json({
-                message:"something went wrong"
-            })
+                message:' account logged out successfully'
+            })  
+            res.end('end');
+           // res.redirect('/');
+            console.log('after loggout session: ',req.session);
         }
-    });
-   } else {
-      console.log(session.email);
-     
-   }
-    
+
+     });
 }
     
 

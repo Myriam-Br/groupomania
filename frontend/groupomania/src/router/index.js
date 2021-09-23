@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home';
 import Forum from '../views/Forum';
 import CreatePost from '../views/CreatePost';
+import PostById from '../views/PostById';
 import Account from '../views/Account';
 import EditProfil from '../views/EditProfil';
 import SignUp from '../views/SignUp';
@@ -27,6 +28,11 @@ const routes = [
     path: "/createpost",
     name: "createpost",
     component: CreatePost
+  },
+  {
+    path: "/postId",
+    name: "postId",
+    component: PostById
   },
   {
     path: "/account",

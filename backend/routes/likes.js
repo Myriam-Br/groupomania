@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const likesCtrl = require('../controllers/likes')
+const likesCtrl = require('../controllers/likes');
+const auth = require('../middlewares/auth');
 
 
 router.get('/', likesCtrl.getAllLikes);

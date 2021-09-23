@@ -8,7 +8,7 @@
         <input type="password" class="password" v-model="password">  
         <button  @click="login" class="btn-signin">Sign In</button>
       </form>
-      <div class="error"></div>
+      <div class="error">{{this.errormsg}}</div>
       <p class="signup-msg">
         Don't have an account? 
         <router-link class="link link-to-signup" :to="{ name : 'signup'}">Sign up</router-link>  
@@ -31,6 +31,7 @@ export default {
         return{
           email: '',
           password: '',
+          errormsg:'',
         };
     },
   
@@ -41,12 +42,24 @@ export default {
                password: this.password
            });
            if(response.data.status==true) {
-                this.$router.push('/account');          
+                this.$router.push('/account');  
+                this.errormsg =''        
            } else{
                console.log('ERROR');
+               this.errormsg = 'email or password incorrect'
+
            }
         //console.log(response.data.status);
-            console.log(response);
+            console.log(response.data);
+            var token = response.data.token;
+            localStorage.setItem('mytoken',token);
+            var userID = response.data.userID;
+            localStorage.setItem('userID',userID);
+            var username = response.data.username;
+            localStorage.setItem('username',username);
+            var email = response.data.data.user.email;
+            console.log(email);
+            localStorage.setItem('email',email);
         }
     }
 }
@@ -59,15 +72,13 @@ export default {
     display: flex;
     flex-direction: column;
 
-    h1{
-        text-align: center;
-    }
-
+  
     .form-signin{
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        margin-bottom: 20px;
 
             input{
                 width: 300px;
@@ -90,18 +101,19 @@ export default {
     }
     .signup-msg {
         text-align: center;
+        margin-bottom: 20px;
         .link-to-signup{
         color: rgb(117, 4, 42);
-        font-weight: 500;    
+        font-weight: 500;  
         }
 
     }
     .forgotpw-msg {
         text-align: center;
-        margin-top: -10px;
         .link-to-resetpw{
         color: rgb(117, 4, 42);
-        font-weight: 500;    
+        font-weight: 500;  
+          
         }
 
     }

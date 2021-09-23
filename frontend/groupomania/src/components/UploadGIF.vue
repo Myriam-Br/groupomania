@@ -7,15 +7,14 @@
         </div>
 
         <div class="gif-image">
-           <input type="file" @change="uploadImage">
-           <input type="text" class="image">
-           <img :src="preview"  height="200" class="preview" alt="">
+            <input type="file" @change="onFileChange" accept='image/*' >  
+            <img :src="preview"  height="200" class="preview" alt="">
         </div>
 
         <div class="gif-date">
             <p class="created_at">{{this.create_at}}</p>
         </div>
-        <button @click="onUpload"  class="btn-create">Submit</button>   
+        <button @click="onUploadFile"  class="btn-create">Submit</button>   
     </div>  
 </div>
 </template>
@@ -30,37 +29,45 @@ export default {
     data() {
         return {
             title_publication: null,
-            selected_file: null,
             preview: null,
             create_at: new Date(),
-
+            image:null,
+            userID :localStorage.getItem('userID'), 
         }
     },
 
     methods: {
-        uploadImage(event) {
-            const image = event.target.files[0];
+
+        onFileChange(e) {
+            this.image = e.target.files[0];       
             const reader = new FileReader();
-            reader.readAsDataURL(image);
-            reader.onload = (e) => {
+            reader.readAsDataURL( this.image);
+            reader.onload = e => {
             this.preview = e.target.result;
             };
+            console.log('targeted file: ', e.target.files[0]);
         }, 
 
-        onUpload(){
-            /*const fd = new FormData();
-            fd.append('image',this.selected_file.name);
-            console.log(fd);*/
-  
+        onUploadFile(){         
+            const fd = new FormData();      
+            fd.append('image', this.image, this.image.name);
 
-            axios.post('/publication/' , {
-                userID: 57,
-                title: this.title_publication,
-                imageUrl : this.preview,
-                created_at : new Date()
-            }) 
+            /*const headers = { 
+                "Authorization": "Bearer " + localStorage.getItem('mytoken'),
+                "Content-Type":"multipart/form-data"
+            }; */
+
+            axios.post('/publication',
+            {  userID: this.userID,
+                title:this.title_publication,
+                imageUrl: fd,
+                create_at: this.create_at  }        
+            ) 
             .then(
-                res => console.log(res)
+                res => console.log('this is the response: ',res)
+            )
+            .catch(
+              console.log('ERROR')
             )
         },
      
@@ -102,14 +109,12 @@ export default {
         }
         .gif-image {
 
-            .preview-image{
+            .preview{
             width: 100%;
-            height: auto;
+            height: 200px;
             border-radius: 5px;
             object-fit: scale-down;
-            }
-            #publication_gif{
-                display: none;
+            //display: flex;
             }
         }
 

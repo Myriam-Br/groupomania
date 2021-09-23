@@ -1,45 +1,27 @@
 <template>
   <div class="comment-container">  
-      <div class="white-container">
-            <div class="coms">
-                <p>username:</p>
-                <p>comment</p>
-            </div>
-            <textarea class="comment-field"></textarea>
-        </div>
-
-        <button @click="sendComment" class="btn-comment">Send</button>
+            <p class="username">{{this.username}}</p>
+            <p class="comment">{{comms.comment_user}}</p>
   </div>
 </template>
 
 <script>
+//import axios from "axios"
 export default {
     name: "comments",
+    props:[ "comms"], 
 
     data() {
         return{
-            comment: null,
-            userComs : [],
+            commentaire: null,
+            userID: localStorage.getItem('userID'),
+            username: localStorage.getItem('username')
+            
         };    
     },
 
-    render:{ 
-        function(createElement){
-            var newElement = createElement('p', 'hi');
-            console.log(newElement);
-            return createElement('div', [
-                newElement
-                
-            ])      
-        }
-
-    },
-
     methods: {
-        sendComment() {  
-                  
-        }
-
+      
     }
 
 }
@@ -50,46 +32,15 @@ export default {
         width: 100%;
         height:45%; 
         display: flex; 
-        flex-direction: column;
-        
-        .white-container {
-           border: solid black 2px;
-            
-            .coms{
-                height: auto;
-                display: flex;
-                background-color: azure;
-                margin-bottom: 5px;
-                margin-top: 5px;
-                p{
-                    margin-right: 10px;
-                    font-size: 16px;
-                }
-            }
-
-            .comment-field{
-                max-height: 80px;
-                height: 50px;
-                width: 99%;
-                resize: none;
-                border: black solid 1px;
-                overflow: auto;
-                outline: none;
-                font-size: 12px;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ;
-
-            }
+        background-color: azure;
+        p{
+            margin-right: 30px;
         }
-
-        .btn-comment{
-            width: 60px;
-            height: 30px;
-            padding: 3px;
-            box-shadow: none;
-            background-color: rgb(21, 55, 148);
-            color: white;
-            font-weight: 400;
-            font-size: 16px;
+        .username{
+            color: purple;
+            font-size: 15px;
+            font-weight: 500;
         }
+   
 }
 </style>
