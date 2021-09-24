@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home';
+import Test from '../views/Test';
 import Forum from '../views/Forum';
 import CreatePost from '../views/CreatePost';
 import PostById from '../views/PostById';
@@ -11,18 +11,20 @@ import SignIn from '../views/SignIn';
 import ForgotPassword from '../views/ForgotPassword';
 
 
+
 Vue.use(VueRouter)
 
 const routes = [
+
   {
     path: "/",
-    name: "home",
-    component: Home
-  },
-  {
-    path: "/forum",
     name: "forum",
     component: Forum
+  },
+  {
+    path: "/test",
+    name: "test",
+    component: Test
   },
   {
     path: "/createpost",

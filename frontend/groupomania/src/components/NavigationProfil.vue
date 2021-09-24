@@ -22,7 +22,6 @@
 </template>
 
 <script>
-//import Logo from "../assets/icon-left-font-monochrome-white.svg";
 import axios from "axios"
 export default {
   name: 'navigationProfil', 
@@ -42,7 +41,7 @@ export default {
        axios.get('http://localhost:8080/api/users/logout')
     .then(
       response => console.log(response),
-      this.$router.push('/forum') 
+      this.$router.push('/') 
     )
     .catch(
       error => console.log(error)

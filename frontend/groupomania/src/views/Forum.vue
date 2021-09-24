@@ -5,8 +5,7 @@
       <span class="errMsg">{{this.errMsg}}</span>
        <div class="forum"> 
          <div class="publications">
-            <PostCard v-for="(publication, index) in this.publications " :key="index" :publication="publication" class="publication"/>
-            
+            <PostCard v-for="(publication, index) in this.publications " :key="index" :publication="publication" class="publication"/>            
          </div>   
       </div>
   </div>
@@ -52,8 +51,9 @@ export default {
         response => {
           this.publications = response.data.data,
           console.log('publication by ID',this.publications);
-          var publicationArray = JSON.stringify(this.publications);
-          localStorage.setItem('publicationArray', publicationArray);    
+          var publicationArray = JSON.parse(this.publications);
+          localStorage.setItem('publicationArray', publicationArray);
+          console.log(this.publications);    
         }    
       )
 
@@ -63,14 +63,13 @@ export default {
            response => {
              this.username = response.data.data[0].username;
              this.userID = response.data.data[0].created_at;
-             console.log(response.data.data[0]);
+            // console.log(response.data.data[0]);
            }
        )
        .catch(
            error => console.log(error)
        )
-
-     
+    
     },
 
     methods:{
@@ -102,7 +101,7 @@ export default {
   .container{
     display: flex;
     flex-direction: column;
-    padding-bottom: 60px;
+    padding-bottom: 20px;
     .show_create{
       width: 50px;
       align-self: center;

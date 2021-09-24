@@ -15,7 +15,7 @@ export default {
         return{
             commentaire: null,
             userID: localStorage.getItem('userID'),
-            userComment: localStorage.setItem('userComment', this.comms.userID),
+            userComment: this.comms.userID,
             username: null,
 
             
@@ -23,13 +23,19 @@ export default {
     },
 
    mounted(){
-       axios.get('/users/' + localStorage.getItem('userComment'))
+       axios.get('/users/' + this.comms.userID)
        .then(
-           response => this.username = response.data.data[0].username
+           response => {
+               this.username = response.data.data[0].username;
+               console.log(this.username);
+            }
        )
        .catch(
            error => console.log(error)
        )
+
+
+       console.log(this.comms.userID);
    }
 
 }

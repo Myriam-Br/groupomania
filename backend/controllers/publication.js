@@ -7,7 +7,7 @@ const Publication = require('../models/Publication');
 exports.publicationsList = (req, res) => {
     console.log('session check',req.session);
     console.log('headers check', req.headers);
-    dbConnect.query('SELECT * FROM publication', (error, result) => {
+    dbConnect.query('SELECT * FROM publication ORDER BY created_at DESC', (error, result) => {
         if(error) {
             res.json({
                 status: false, 
@@ -40,31 +40,56 @@ exports.publicationsById = (req, res) => {
 
 //create publication
 exports.createPublication = (req, res) => {
-
+    //var today = new Date()
+    let imageUrl;
+    let uploadPath;
+  
+    if(!req.files || Object.keys(req.files).length === 0){
+       res.status(400).send('no file were uploaded')
+    } else{
+        
+    }
+  
+    //name of the input is imageUrl
+    imageUrl = req.files.imageUrl;
+    uploadPath = __dirname + '/images/' + imageUrl.name;
+    //console.log(sampleFile);
+    console.log(req.files.imageUrl);
+  
     const publication = new Publication({
-        userID : req.body.userID,
-        title : req.body.title,
-        imageUrl : req.file,
-        created_at : new Date()
+        userID : 101,
+        title : "some title",
+        imageUrl : req.files.imageUrl,
+        created_at : req.body.created_at,
     }); 
     
-    console.log(publication);
+    //console.log(req);
+   // console.log(publication.created_at);
    
-    console.log( 'img:',req.file);
-  
-    dbConnect.query('INSERT INTO publication SET ?', publication, (error, result) => {
-        if(error) {
-            res.json({
-                status: false, 
-                message: 'there are some error with query'})
-        }else {
-            res.json({
-                status: true,
-                data: result,
-                message : 'publication created successfully'})
-        }     
-    })
-   
+   // console.log( 'img:',req.file);
+
+    //use mv() 
+    imageUrl.mv(uploadPath, function(err) {
+        if(err) {
+            return res.status(500).send(err);
+        } else {
+            res.send('File uploaded'); 
+            dbConnect.query('INSERT INTO publication SET ?', publication, (error, result) => {
+                if(error) {
+                    res.json({
+                        status: false, 
+                        message: 'there are some error with query'})
+                }else {
+                    res.json({
+                        status: true,
+                        data: result,
+                        message : 'publication created successfully'})
+                }     
+            })
+        }      
+
+    })  
+
 }
 
 //update publication

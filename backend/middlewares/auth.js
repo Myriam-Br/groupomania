@@ -2,7 +2,8 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const MYTOKEN = process.env.TOKEN
+const MYTOKEN = process.env.TOKEN;
+//verfication du token
 
 module.exports = (req, res, next) => {
   try {

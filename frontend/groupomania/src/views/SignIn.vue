@@ -41,8 +41,9 @@ export default {
                email: this.email,
                password: this.password
            });
+           //console.log(response);
            if(response.data.status==true) {
-                this.$router.push('/forum');  
+                this.$router.push('/');  
                 this.errormsg =''        
            } else{
                console.log('ERROR');

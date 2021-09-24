@@ -4,7 +4,7 @@ var Publication = function(publication) {
     this.userID = publication.userID;
     this.title = publication.title;
     this.imageUrl = publication.imageUrl;
-    this.created_at = new Date();
+    this.created_at = publication.created_at;
 }
 
 

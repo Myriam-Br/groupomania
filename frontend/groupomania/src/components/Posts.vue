@@ -5,7 +5,7 @@
                 <span>{{this.username}}</span> 
                 <span class="posted_at"> {{publication.created_at}}</span> 
             </div>
-            
+
             <h2>{{publication.title}}</h2>
             <img :src="publication.imageUrl" class="gif_img" alt="image">
             <div class="interaction">
@@ -21,6 +21,7 @@
                 </div> 
                 <button @click="showComments" class="show">comment</button>
                 <span>{{this.message}}</span>
+                <button @click="test">test</button>
             </div>
          </div>
 
@@ -56,42 +57,51 @@ export default {
             show: null,
             username: null,
             //comment_count: null,
+            created_at: this.publication.created_at
         }
     },
 
     methods: {
         
        
-        recupID(){
-            console.log(this.publication.id);
+        test(){
+            console.log();
         }, 
         sendLike() {
+            /*
             const headers = { 
                 "Authorization": "Bearer " + localStorage.getItem('mytoken'),
-            }; 
+            }; */
             this.like = 1,
             this.dislike = 0
             console.log('send like');
             console.log(this.publicationArray.length);
             axios
-            .post('likes',{headers} ,{
+            .post('likes',{
                 userID: this.userID,
                 publicationID: this.publication.id,
                 like: this.like,
                 dislike: this.dislike,
             })
+            .then(
+                response => console.log(response)
+            )
+            .catch(
+                error => console.log(error)
+            )
         },
 
         sendDislike() { 
+            /*
             const headers = { 
                 "Authorization": "Bearer " + localStorage.getItem('mytoken'),
-            }; 
-            console.log(headers);
+            }; */
+            //console.log(headers);
             this.like = 0,
             this.dislike = 1
             console.log('send dislike');
             axios
-            .post('likes', {headers}, {
+            .post('likes', {
                 userID: this.userID,
                 publicationID: this.publication.id,
                 like: this.like,
@@ -105,20 +115,21 @@ export default {
             this.show = true;
             this.$router.push('/publication_by_id'); 
             localStorage.setItem('publicationById', this.publication.id) 
-            console.log('CHECK PUBLICATION: ', this.publication.userID);
-            localStorage.setItem('publicationByUserId', this.publication.userID)
+           console.log('CHECK PUBLICATION: ', this.publication.userID);
+            localStorage.setItem('publicationByUserId', this.publication.userID);   
         }
 
 
     },
 
      mounted() {
+         /*
             const headers = { 
             "Authorization": "Bearer " + localStorage.getItem('mytoken'),
-            }; 
+            }; */
    
                //get total likes
-            axios.get('/likes/total_likes/' + this.publication.id, { headers})
+            axios.get('/likes/total_likes/' + this.publication.id)
                 .then(
                     response => this.like_count = parseInt(response.data.data[0].total_likes)
                 )
@@ -126,7 +137,7 @@ export default {
                     console.log('ERROR')
                 )
           
-            axios.get('/likes/total_dislikes/' + this.publication.id, { headers})
+            axios.get('/likes/total_dislikes/' + this.publication.id)
             
                 .then(
                 response => this.dislike_count = parseInt(response.data.data[0].total_dislikes)
@@ -135,7 +146,7 @@ export default {
                     console.log('ERROR')
                 )
 
-            axios.get('/comments/' + this.publication.id, {headers})
+            axios.get('/comments/' + this.publication.id)
                 .then(
                     response => this.comment_list = response.data.data
                 )
@@ -145,7 +156,7 @@ export default {
 
 
 
-            axios.get('/users/' + localStorage.getItem('publicationByUserId'))
+            axios.get('/users/' + this.publication.userID)
                 .then(
                     response => {
                     console.log('INFO USER:', response);
@@ -167,9 +178,8 @@ export default {
     width: 100%;
     height: auto;
     padding: 5px 20px;
-    border-radius: 10px;
+    border-radius: 0px;
     align-self: center;
-    margin-bottom: 20px;
     color: black;
 
    h2{

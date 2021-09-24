@@ -52,8 +52,8 @@ export default {
         comment_list: null,
         comment_field: null,
         created_at: null,
-        userID: null
-        
+        userID: localStorage.getItem('userID'),
+        //commentdate: new Date(),        
       }
     
     },
@@ -63,13 +63,13 @@ export default {
           const headers = { 
                 "Authorization": "Bearer " + localStorage.getItem('mytoken'),
           };console.log(headers);
+          console.log(this.publication_by_id.data[0].id);
             axios
-            .post('/comments', {headers},
+            .post('/comments',
                 {
                     userID: this.userID,
-                    publicationID: this.publication_by_id,
-                    commentaire: this.comment_field,
-                    created_at: new Date()
+                    publicationID: JSON.stringify(this.publication_by_id.data[0].id),
+                    commentaire: this.comment_field,               
                 }
             )
             .then(
@@ -81,16 +81,17 @@ export default {
         },
     },
     mounted(){
-      const headers = { 
+     /* const headers = { 
                 "Authorization": "Bearer " + localStorage.getItem('mytoken'),
-      }; 
+      }; */
 
       axios.get('/publication/' + localStorage.getItem('publicationById'))
       .then(
         response => {
-          console.log('PUBLICATION BY ID: ', response.data.data[0].created_at);
+          console.log('PUBLICATION BY ID: ', response.data.data[0].userID);
           this.publication_by_id = response.data;
-          localStorage.setItem('userIdByPublication', response.data.data[0].userID );
+          this.userPublication = response.data.data[0].userID
+          localStorage.setItem('userPublication', response.data.data[0].userID );
           this.created_at = response.data.data[0].created_at
 
           }
@@ -100,7 +101,7 @@ export default {
       )
       
 
-      axios.get('/comments/' + this.publication_by_id, {headers})
+      axios.get('/comments/' + this.publication_by_id)
       .then(
           response => {
           console.log('COMMENT LIST: ', response)
@@ -115,10 +116,10 @@ export default {
 
 
       axios
-      .get('/users/' + localStorage.getItem('userIdByPublication'))
+      .get('/users/' + localStorage.getItem('userPublication'))
       .then(
         response => {
-          console.log(response.data.data[0].username);
+          //console.log('DATA', response.data.data[0].username);
           this.username = response.data.data[0].username;
         }
       )
@@ -158,7 +159,7 @@ export default {
         width: 100%;
         height: auto;
         padding: 5px 20px;
-        border-radius: 10px;
+        border-radius: 0px;
         align-self: center;
         margin-bottom: 20px;
    

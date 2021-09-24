@@ -11,7 +11,7 @@ router.get('/',  publicationCtrl.publicationsList)
 router.get('/:id', publicationCtrl.publicationsById)
 
 //create new publication
-router.post('/', auth, multer, publicationCtrl.createPublication)
+router.post('/', multer, publicationCtrl.createPublication)
 
 //create new publication
 router.put('/:id', auth, multer, publicationCtrl.updatePublication)

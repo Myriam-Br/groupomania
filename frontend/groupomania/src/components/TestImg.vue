@@ -1,6 +1,9 @@
 <template>
   <div class="image_publication">
-      <input type="file" />
+      <form action="/" enctype="multipart/form-data" method="post">
+        <input type="file" name="image" accept='image/*' >
+        <input type="submit" value="Upload">
+      </form>  
       <button>Upload</button>
   </div>
 </template>
