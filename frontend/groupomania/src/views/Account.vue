@@ -34,13 +34,15 @@ export default {
 <style lang="scss" scoped>
     .container{
         font-size: 16px;
+        color: white;
 
         .profil-info{
             margin-bottom: 20px;
    
         }
         .edit-profil{
-            align-self: center
+            align-self: center;
+            color: white;
         }
     }
 </style>

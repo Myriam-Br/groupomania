@@ -23,6 +23,24 @@ exports.usersList = (req, res) => {
     })
 }
 
+exports.usersById = (req, res) => {
+    var userID = req.params.id
+    dbConnect.query('SELECT * FROM user WHERE id=?', userID, (error, result) => {
+        if(error) {
+            res.json({
+                status: false, 
+                code: 400,
+                message: 'there are some error with query'})
+        }else {
+            res.json({
+                status: true,
+                code: 200,
+                data: result,
+                message : 'user list fetched successfully'})
+        }     
+    })
+}
+
 
 exports.register = async(req, res) => {
    // console.log(errors);
@@ -42,7 +60,7 @@ exports.register = async(req, res) => {
                     username: req.body.username,
                     email: req.body.email,
                     password: hashedPwd,
-                    isAdmin : 0
+                    isAdmin : req.body.isAdmin
                 })
                 dbConnect.query('INSERT INTO user SET ?', users, (error, result) => {
                     if(error) {
@@ -120,9 +138,6 @@ exports.login = async(req, res) => {
                         if(compPwd){
                             const MYTOKEN = process.env.TOKEN;
                             req.session.authentificated = true;
-                            req.session.user = {
-                               email
-                            };
                             res.json({
                                 status: true,
                                 code: 200,
@@ -131,9 +146,9 @@ exports.login = async(req, res) => {
                                 userID : result[0].id,
                                 username : result[0].username,
                                 token: jwt.sign (
-                                    { userId: result[0].id},
+                                    { userID: result[0].id},
                                     MYTOKEN,
-                                    { expiresIn: '24h' }
+                                    { expiresIn: '24h'}
                                 )            
                             })
                            

@@ -30,8 +30,8 @@ const routes = [
     component: CreatePost
   },
   {
-    path: "/postId",
-    name: "postId",
+    path: "/publication_by_id",
+    name: "publication_by_id",
     component: PostById
   },
   {

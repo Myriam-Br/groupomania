@@ -52,12 +52,11 @@ export default {
             const fd = new FormData();      
             fd.append('image', this.image, this.image.name);
 
-            /*const headers = { 
+            const headers = { 
                 "Authorization": "Bearer " + localStorage.getItem('mytoken'),
-                "Content-Type":"multipart/form-data"
-            }; */
+            }; 
 
-            axios.post('/publication',
+            axios.post('/publication',{headers},
             {  userID: this.userID,
                 title:this.title_publication,
                 imageUrl: fd,

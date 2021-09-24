@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <NavigationProfil v-if="isConnected"/>
-      <Navigation v-else/>
+      <NavigationProfil/>
     </header>  
     <router-view class="view-container"></router-view>
     <footer>
@@ -13,7 +12,7 @@
 
 <script>
 import NavigationProfil from "./components/NavigationProfil";
-import Navigation from "./components/Navigation";
+//import Navigation from "./components/Navigation";
 //import Footer from "./components/Footer";
 
 
@@ -21,7 +20,7 @@ export default {
   name: "app",
   components:{
     NavigationProfil,
-    Navigation,
+  
   },
   data() {
     return {
@@ -70,7 +69,8 @@ footer, header, hgroup, menu, nav, section {
 body{
   line-height: 1;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-color: rgb(234, 244, 245);  
+  background-color: rgb(26, 27, 27);  
+  color: white;
 }
 #app{
  
@@ -97,6 +97,8 @@ h1{
       text-align: center;
       font-size: 20px;
       margin-bottom: 20px;
+      color: white;
+      font-weight: bold;
 }
 
 footer{
@@ -106,6 +108,16 @@ right: 0%;
 left: 0%;
 background-color: aquamarine;
 align-self: center;
+}
+.like-btn{
+  background-color: rgb(72, 218, 72);
+  width: 20px;
+  height: 20px;
+}
+.dislike-btn{
+  background-color: rgb(200, 43, 43);
+  width: 20px;
+  height: 20px;
 }
 
 </style>

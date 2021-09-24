@@ -30,8 +30,18 @@ export default {
 
     methods: {
         deleteAccount() {
-            const response = axios.delete('/users/' + localStorage.getItem('userID'));
-            console.log(response);
+            axios.delete('/users/' + localStorage.getItem('userID'))
+            .then(
+                response => console.log(response)
+
+            )
+            .catch(
+               error => console.log(error)
+            )
+
+
+
+
             localStorage.removeItem("mytoken");
             localStorage.removeItem("userID");
             localStorage.removeItem("email");
@@ -59,6 +69,7 @@ export default {
 .profil-user{
     
     width: 100%;
+    color: white;
 
     .profil-info{
         display: flex;

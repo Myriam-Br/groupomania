@@ -11,10 +11,10 @@ router.get('/',  publicationCtrl.publicationsList)
 router.get('/:id', publicationCtrl.publicationsById)
 
 //create new publication
-router.post('/', multer, publicationCtrl.createPublication)
+router.post('/', auth, multer, publicationCtrl.createPublication)
 
 //create new publication
-router.put('/:id', multer, publicationCtrl.updatePublication)
+router.put('/:id', auth, multer, publicationCtrl.updatePublication)
 
 //create new publication
 router.delete('/:id', publicationCtrl.deletePublication)

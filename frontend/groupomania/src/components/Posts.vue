@@ -1,39 +1,44 @@
 <template> 
-    <div class="post">
-        <h2>{{publication.title}}</h2>
-        <span>{{publication.id}}</span>
-        <img :src="publication.imageUrl" class="gif_img" alt="image">
-        
-        <div class="likes">
-        <button @click="sendLike" class="like"></button>
-        <span class="like-counter" >{{this.like_count}}</span>
-        <button  @click="sendDislike" class="dislike"></button>
-        <span class="dislike-counter">{{this.dislike_count}}</span> 
-        </div>
-        <Comments v-for="(comms, index) in this.comment_list" :key="index" :comms="comms"/>
-        <div class="comment-field-container">
-             <input class="comment_field" type="text" v-model="comment_field"> 
-             <button @click="createComment">send</button>
-        </div> 
-       
+    <div class="container">
+        <div class="post">
+            <div class="info_user">  
+                <span>{{this.username}}</span> 
+                <span class="posted_at"> {{publication.created_at}}</span> 
+            </div>
+            
+            <h2>{{publication.title}}</h2>
+            <img :src="publication.imageUrl" class="gif_img" alt="image">
+            <div class="interaction">
+                <div class="likes">
+                    <div class="like">
+                        <button @click="sendLike" class="like-btn"></button>
+                        <span class="like-counter" >{{this.like_count}}</span>
+                    </div>
+                    <div class="dislike">
+                        <button  @click="sendDislike" class="dislike-btn"></button>
+                        <span class="dislike-counter">{{this.dislike_count}}</span> 
+                    </div>
+                </div> 
+                <button @click="showComments" class="show">comment</button>
+                <span>{{this.message}}</span>
+            </div>
+         </div>
 
-        <span>{{this.message}}</span>
-        <span class="posted_at">Posted: {{publication.created_at}}</span> 
-        <button @click="recupID">test</button>
     </div>
+   
    
 </template>
 
 <script>
 import axios from 'axios'
-import Comments from "../components/Comments"
+//import Comments from "../components/Comments"
 //import { response } from 'express'
 //import Likes from "../components/Likes"
 export default {
     props:["publication"],
 
     components: {
-        Comments,   
+          
     },
 
     data() {
@@ -47,22 +52,29 @@ export default {
             dislike_count:null,
             publicationArray : JSON.parse(localStorage.getItem('publicationArray')),
             comment_list : null,
-            comment_field: null
-
+            comment_field: null,
+            show: null,
+            username: null,
+            //comment_count: null,
         }
     },
 
     methods: {
+        
+       
         recupID(){
             console.log(this.publication.id);
         }, 
         sendLike() {
+            const headers = { 
+                "Authorization": "Bearer " + localStorage.getItem('mytoken'),
+            }; 
             this.like = 1,
             this.dislike = 0
             console.log('send like');
             console.log(this.publicationArray.length);
             axios
-            .post('likes', {
+            .post('likes',{headers} ,{
                 userID: this.userID,
                 publicationID: this.publication.id,
                 like: this.like,
@@ -70,12 +82,16 @@ export default {
             })
         },
 
-        sendDislike() {
+        sendDislike() { 
+            const headers = { 
+                "Authorization": "Bearer " + localStorage.getItem('mytoken'),
+            }; 
+            console.log(headers);
             this.like = 0,
             this.dislike = 1
             console.log('send dislike');
             axios
-            .post('likes', {
+            .post('likes', {headers}, {
                 userID: this.userID,
                 publicationID: this.publication.id,
                 like: this.like,
@@ -83,17 +99,17 @@ export default {
             })
         },
 
-        createComment() {
-            axios
-            .post('/comments', 
-                {
-                    userID: this.userID,
-                    publicationID: this.publication.id,
-                    commentaire: this.comment_field,
-                    created_at: new Date()
-                }
-            )
+        
+
+        showComments(){
+            this.show = true;
+            this.$router.push('/publication_by_id'); 
+            localStorage.setItem('publicationById', this.publication.id) 
+            console.log('CHECK PUBLICATION: ', this.publication.userID);
+            localStorage.setItem('publicationByUserId', this.publication.userID)
         }
+
+
     },
 
      mounted() {
@@ -127,14 +143,25 @@ export default {
                     console.log('ERROR')
                 )
 
+
+
+            axios.get('/users/' + localStorage.getItem('publicationByUserId'))
+                .then(
+                    response => {
+                    console.log('INFO USER:', response);
+                    this.username = response.data.data[0].username;
+                    }
+                )
+                .catch(
+                    error => console.log(error)
+                )
+
     }
 }
 </script>
 
 <style lang="scss" scoped>
 
-
-    
 .post{
     background-color: rgb(156, 180, 223);
     width: 100%;
@@ -143,6 +170,7 @@ export default {
     border-radius: 10px;
     align-self: center;
     margin-bottom: 20px;
+    color: black;
 
    h2{
        text-align: center;
@@ -168,19 +196,39 @@ export default {
         }
 
     }
+    .interaction{
+        display: flex;
+        justify-content: center;
+        .likes{
+            display: flex;
+            margin-right: 10px;
 
-  
-
-    .like{
-        background-color: rgb(72, 218, 72);
-        width: 20px;
-        height: 20px;
+            .like{
+                display: flex; 
+                margin-right: 10px;
+                .like-btn{
+                    background-color: rgb(72, 218, 72);
+                    width: 20px;
+                    height: 20px; 
+                    margin-right: 5px;    
+                }        
+            }
+             .dislike{
+                display: flex;
+                .dislike-btn{
+                    background-color: rgb(200, 43, 43);
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 5px;
+                }
+            }
+        }
+       
+        
+        
     }
-    .dislike{
-      background-color: rgb(200, 43, 43);
-      width: 20px;
-      height: 20px;
-  }
+
+    
    
 }
 

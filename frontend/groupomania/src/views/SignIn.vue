@@ -42,7 +42,7 @@ export default {
                password: this.password
            });
            if(response.data.status==true) {
-                this.$router.push('/account');  
+                this.$router.push('/forum');  
                 this.errormsg =''        
            } else{
                console.log('ERROR');

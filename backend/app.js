@@ -40,7 +40,7 @@ app.get('/', (req,res) => {
 //import user list
 const userRoutes = require('./routes/user');
 //import auth 
-const authRoutes = require('./routes/auth');
+//const authRoutes = require('./routes/auth');
 //import publication list
 const publicationRoutes = require('./routes/publication');
 //import comments list
@@ -54,7 +54,7 @@ const likesRoutes = require('./routes/likes');
 //create user routes
 app.use('/api/users', userRoutes );
 //create user routes
-app.use('/api/auth', authRoutes );
+//app.use('/api/auth', authRoutes );
 //create publication routes
 app.use('/api/publication', publicationRoutes);
 //create comments routes

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-//import axios from "axios"
+import axios from "axios"
 export default {
     name: "comments",
     props:[ "comms"], 
@@ -15,14 +15,22 @@ export default {
         return{
             commentaire: null,
             userID: localStorage.getItem('userID'),
-            username: localStorage.getItem('username')
+            userComment: localStorage.setItem('userComment', this.comms.userID),
+            username: null,
+
             
         };    
     },
 
-    methods: {
-      
-    }
+   mounted(){
+       axios.get('/users/' + localStorage.getItem('userComment'))
+       .then(
+           response => this.username = response.data.data[0].username
+       )
+       .catch(
+           error => console.log(error)
+       )
+   }
 
 }
 </script>

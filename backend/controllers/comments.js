@@ -32,6 +32,26 @@ exports.getCommentByPublication = (req, res) => {
         }     
     })
 }
+exports.getTotalComment = (req,res) => {
+    var publicationID = req.params.publicationID
+    console.log(publicationID);
+ 
+    dbConnect.query('SELECT SUM(quantity) total_comments FROM comments WHERE publicationID=?', publicationID, (error, result) => {
+        if(error) {
+            res.json({
+                status: false, 
+                message: 'there are some error with query'})
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'total comments fetched successfully'})
+
+                console.log(result);
+        }    
+    })
+
+}
 
 exports.createComment = (req, res) => {
     
@@ -49,8 +69,9 @@ exports.createComment = (req, res) => {
             res.json({
                 status: true,
                 data: result,
-                messgae: 'comments saved successfuly'
+                message: 'comments saved successfuly'
             })
+            console.log(result);
         }
     })
 }

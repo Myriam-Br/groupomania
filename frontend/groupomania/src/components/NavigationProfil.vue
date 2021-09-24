@@ -3,13 +3,18 @@
    <div class="navigation">
       <img :src="mylogoSVG" class="logo"/>
 
- 
     <div class="menu">
       <ul class="navigation-links">
+        <div class="nav_default">
         <router-link class="link" :to="{ name : 'forum'}">Forum</router-link>
-        <router-link class="link" :to="{ name : 'createpost'}">Create Post</router-link>
-        <router-link class="link profil" :to="{ name : 'account'}">Account</router-link>
-        <button class="logout" @click="logout"></button>
+        <router-link v-if="isConnected" class="link" :to="{ name : 'createpost'}">Create Post</router-link>
+        <router-link v-if="isConnected" class="link profil" :to="{ name : 'account'}">Account</router-link>
+        </div>  
+        <div class="show_disconnected" v-if="!isConnected">
+        <router-link class="link" :to="{ name : 'signin'}">Sign in</router-link>
+        <router-link class="link" :to="{ name : 'signup'}">Sign up</router-link>   
+        </div>  
+        <button v-else class="logout" @click="logout"></button>         
       </ul>
     </div>
   </div>
@@ -26,7 +31,8 @@ export default {
   },
   data() {
     return{ 
-      mylogoSVG: require('../assets/icon-left-font-monochrome-white.svg')
+      mylogoSVG: require('../assets/icon-left-font-monochrome-white.svg'),
+      isConnected : localStorage.getItem('userID'),
 
     }
   },
@@ -36,7 +42,7 @@ export default {
        axios.get('http://localhost:8080/api/users/logout')
     .then(
       response => console.log(response),
-      this.$router.push('/') 
+      this.$router.push('/forum') 
     )
     .catch(
       error => console.log(error)
@@ -55,10 +61,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+
 .navigation{
   background-color: rgb(46, 53, 58);
   display: flex;
   justify-content: space-between;
+
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.534);
 
   .logo{
@@ -68,6 +76,7 @@ export default {
 
   .navigation-links{
     margin-top: 20px;
+    display: flex;
     .link{
       margin-right: 20px;
       color: white;

@@ -7,7 +7,7 @@ const userCtrl = require('../controllers/user');
 router.get('/', userCtrl.usersList)
 
 //get all users
-router.get('/', userCtrl.usersList)
+router.get('/:id', userCtrl.usersById)
 
 //get users login
 router.get('/login',  userCtrl.loginAuth)
