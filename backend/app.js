@@ -5,18 +5,9 @@ const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
 const fileUpload = require('express-fileupload')
-const store = new session.MemoryStore();
 require('dotenv').config()
 const helmet = require('helmet')
 
-const SECRET = process.env.SESSION_SECRET_CODE;
-app.use(session({
-  secret: SECRET,
-  cookie: {maxAge: 30000},
-  saveUninitialized: false,
-  resave: false,
-  store
-}))
 
 app.use(fileUpload());
 app.use(helmet());
@@ -38,29 +29,6 @@ app.get('/', (req,res) => {
 });
 
 
-app.post('/', (req,res) => { 
-  res.send('This is a post method');  
-  let imageUrl;
-  let uploadPath;
-
-  if(!req.files || Object.keys(req.files).length === 0){
-     res.status(400).send('no file were uploaded')
-  }
-
-  //name of the input is imageUrl
-  imageUrl = req.files.imageUrl;
-  uploadPath = __dirname + '/images/' + imageUrl.name;
-  //console.log(sampleFile);
-  console.log(req.files.imageUrl);
-
-  //use mv() to pla
-  imageUrl.mv(uploadPath, function(err) {
-    if(err) return res.status(500).send(err);
-    res.send('File uploaded');
-  }) 
-
-
-});
 
 //---------ROUTES DE MON APPLICATION-------//
 //import user list

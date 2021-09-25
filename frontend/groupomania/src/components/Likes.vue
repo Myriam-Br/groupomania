@@ -31,14 +31,14 @@ export default {
       sendLike() {
         this.like = 1,
         this.dislike = 0
-       console.log('send like');
-       console.log(this.publicationArray.length);
+       //console.log('send like');
+      // console.log(this.publicationArray.length);
       },
 
       sendDislike() {
         this.like = 0,
         this.dislike = 1
-       console.log('send dislike');
+      // console.log('send dislike');
       }
        
     },

@@ -5,18 +5,14 @@
         <div class="gif-description">
             <input class="publication_title" type="text" v-model="title_publication">
         </div>
-
-        <form action="api/publication" method="POST" enctype="multipart/form-data">
-            <input @change="onFileChange" type="file" name="imageUrl" accept='image/*'/>  
-            <input @click="onUploadFile" type="submit" class="btn-submit"/>  
-        </form>
-        <button  class="btn-create">Submit</button>   
+        <input @change="onFileChange" type="file" name="imageUrl" accept='image/*'/>  
+        <button @click="onUploadFile"   class="btn-create">Submit</button>   
     </div>  
 </div>
 </template>
 
 <script>
-//import axios from 'axios';
+import axios from 'axios';
 export default {
     name: "mygif",
     components: {
@@ -28,6 +24,7 @@ export default {
             preview: null,
             image:null,
             userID :localStorage.getItem('userID'), 
+            show_delete: null,
         }
     },
 
@@ -41,36 +38,23 @@ export default {
 
         onUploadFile(){
                 console.log('je fonctionne');
-        }
-/* 
-        onUploadFile(){    
-              
-            const fd = new FormData();      
-            fd.append('image', this.image, this.image.name);
-             
-            const headers = { 
-                "Authorization": "Bearer " + localStorage.getItem('mytoken'),
-            }; 
 
-            axios.post('/publication',
-            {  userID: this.userID,
-                title:this.title_publication,
-                imageUrl: "some file",
-            }        
-            ) 
-            .then(
-                res => {
-                    console.log('this is the response: ',res)
-                }
-            )
-            .catch(
-              console.log('ERROR')
-            )
-
+                   axios.post('/publication',
+                {  userID: this.userID,
+                    title: this.title_publication,
+                    imageUrl: "some file",
+                }        
+                ) 
+                .then(
+                    res => {
+                        console.log('this is the response: ',res)
+                    }
+                )
+                .catch(
+                console.log('ERROR')
+                )
             this.$router.push('/');
-            console.log();
-        },*/
-
+        }
      
     }
 

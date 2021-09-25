@@ -7,7 +7,6 @@
       <ul class="navigation-links">
         <div class="nav_default">
         <router-link class="link" :to="{ name : 'forum'}">Forum</router-link>
-        <router-link v-if="isConnected" class="link" :to="{ name : 'createpost'}">Create Post</router-link>
         <router-link v-if="isConnected" class="link profil" :to="{ name : 'account'}">Account</router-link>
         </div>  
         <div class="show_disconnected" v-if="!isConnected">

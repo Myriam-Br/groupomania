@@ -36,7 +36,11 @@ exports.getCommentByPublication = (req, res) => {
 
 exports.createComment = (req, res) => {
     
-    const comment = new Comments(req.body);
+    const comment = new Comments({
+        userID : req.body.userID,
+        publicationID :req.body.publicationID,
+        comment_user : req.body.comment_user,
+    });
 
     dbConnect.query('INSERT INTO comments SET ?', comment, (error, result) => {
         if(error){

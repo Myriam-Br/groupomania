@@ -40,6 +40,8 @@ exports.publicationsById = (req, res) => {
 
 //create publication
 exports.createPublication = (req, res) => {
+
+    /*
     //var today = new Date()
     let imageUrl;
     let uploadPath;
@@ -56,12 +58,7 @@ exports.createPublication = (req, res) => {
     //console.log(sampleFile);
     console.log(req.files.imageUrl);
   
-    const publication = new Publication({
-        userID : 101,
-        title : "some title",
-        imageUrl : req.files.imageUrl,
-        created_at : req.body.created_at,
-    }); 
+
     
     //console.log(req);
    // console.log(publication.created_at);
@@ -74,21 +71,29 @@ exports.createPublication = (req, res) => {
             return res.status(500).send(err);
         } else {
             res.send('File uploaded'); 
-            dbConnect.query('INSERT INTO publication SET ?', publication, (error, result) => {
-                if(error) {
-                    res.json({
-                        status: false, 
-                        message: 'there are some error with query'})
-                }else {
-                    res.json({
-                        status: true,
-                        data: result,
-                        message : 'publication created successfully'})
-                }     
-            })
+           
         }      
 
-    })  
+    }) */
+
+    const publication = new Publication({
+        userID : req.body.userID,
+        title : req.body.title,
+        imageUrl : req.body.imageUrl,
+    }); 
+
+    dbConnect.query('INSERT INTO publication SET ?', publication, (error, result) => {
+        if(error) {
+            res.json({
+                status: false, 
+                message: 'there are some error with query'})
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'publication created successfully'})
+        }     
+    })
 
 }
 

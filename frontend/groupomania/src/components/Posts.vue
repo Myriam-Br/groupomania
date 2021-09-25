@@ -5,7 +5,6 @@
                 <span>{{this.username}}</span> 
                 <span class="posted_at"> {{publication.created_at}}</span> 
             </div>
-
             <h2>{{publication.title}}</h2>
             <img :src="publication.imageUrl" class="gif_img" alt="image">
             <div class="interaction">
@@ -20,8 +19,6 @@
                     </div>
                 </div> 
                 <button @click="showComments" class="show">comment</button>
-                <span>{{this.message}}</span>
-                <button @click="test">test</button>
             </div>
          </div>
 
@@ -44,17 +41,22 @@ export default {
 
     data() {
         return {
-            userID : localStorage.getItem('userID'),
+            user_publication : this.publication.userID,// from the forum page with get ('/publication')
+            userID: localStorage.getItem('userID'),
+
+            //likes section 
             like: true,
             title: null,
             imageUrl: null,
             message:null, 
             like_count: null,
             dislike_count:null,
-            publicationArray : JSON.parse(localStorage.getItem('publicationArray')),
+
+            //publicationArray : JSON.parse(localStorage.getItem('publicationArray')),
+
+            //comments section
             comment_list : null,
             comment_field: null,
-            show: null,
             username: null,
             //comment_count: null,
             created_at: this.publication.created_at
@@ -75,7 +77,6 @@ export default {
             this.like = 1,
             this.dislike = 0
             console.log('send like');
-            console.log(this.publicationArray.length);
             axios
             .post('likes',{
                 userID: this.userID,
@@ -102,8 +103,8 @@ export default {
             console.log('send dislike');
             axios
             .post('likes', {
-                userID: this.userID,
-                publicationID: this.publication.id,
+                userID: this.userID,//from local storage -> account logged in
+                publicationID: this.publication.id,//from the forum page with get ('/publication')
                 like: this.like,
                 dislike: this.dislike,
             })
@@ -112,14 +113,13 @@ export default {
         
 
         showComments(){
-            this.show = true;
-            this.$router.push('/publication_by_id'); 
-            localStorage.setItem('publicationById', this.publication.id) 
-           console.log('CHECK PUBLICATION: ', this.publication.userID);
-            localStorage.setItem('publicationByUserId', this.publication.userID);   
+      
+                this.$router.push('/publication_by_id'); 
+                localStorage.setItem('publicationById', this.publication.id) ;
+                localStorage.setItem('publicationByIdCreateAt', this.publication.created_at);//display post date
+                localStorage.setItem('publicationByUserId', this.publication.userID);  //storage to display the username get('/users/:id) :id = localStorage.getItem('publicationByUserId')
+          
         }
-
-
     },
 
      mounted() {
@@ -131,7 +131,9 @@ export default {
                //get total likes
             axios.get('/likes/total_likes/' + this.publication.id)
                 .then(
-                    response => this.like_count = parseInt(response.data.data[0].total_likes)
+                    response => {
+                        this.like_count = response.data.data[0].total_likes
+                    }
                 )
                 .catch (       
                     console.log('ERROR')
@@ -140,26 +142,18 @@ export default {
             axios.get('/likes/total_dislikes/' + this.publication.id)
             
                 .then(
-                response => this.dislike_count = parseInt(response.data.data[0].total_dislikes)
+                response =>  {
+                   // console.log(response.data.data[0].total_dislikes);
+                    this.dislike_count = response.data.data[0].total_dislikes;    
+                    }
                 ) 
                 .catch(
                     console.log('ERROR')
                 )
 
-            axios.get('/comments/' + this.publication.id)
-                .then(
-                    response => this.comment_list = response.data.data
-                )
-                .catch(
-                    console.log('ERROR')
-                )
-
-
-
-            axios.get('/users/' + this.publication.userID)
+            axios.get('/users/' + this.user_publication)
                 .then(
                     response => {
-                    console.log('INFO USER:', response);
                     this.username = response.data.data[0].username;
                     }
                 )

@@ -109,15 +109,29 @@ left: 0%;
 background-color: aquamarine;
 align-self: center;
 }
-.like-btn{
-  background-color: rgb(72, 218, 72);
-  width: 20px;
-  height: 20px;
-}
-.dislike-btn{
-  background-color: rgb(200, 43, 43);
-  width: 20px;
-  height: 20px;
-}
+ .likes{
+    display: flex;
+    margin-right: 10px;
+
+    .like{
+        display: flex; 
+        margin-right: 10px;
+        .like-btn{
+            background-color: rgb(72, 218, 72);
+            width: 20px;
+            height: 20px; 
+            margin-right: 5px;    
+        }        
+    }
+      .dislike{
+        display: flex;
+        .dislike-btn{
+            background-color: rgb(200, 43, 43);
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+    }
+        }
 
 </style>

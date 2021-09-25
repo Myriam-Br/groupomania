@@ -51,7 +51,7 @@ export default {
 
            }
         //console.log(response.data.status);
-            console.log(response.data);
+            //console.log(response.data);
             var token = response.data.token;
             localStorage.setItem('mytoken',token);
             var userID = response.data.userID;
@@ -59,7 +59,7 @@ export default {
             var username = response.data.username;
             localStorage.setItem('username',username);
             var email = response.data.data.user.email;
-            console.log(email);
+            //console.log(email);
             localStorage.setItem('email',email);
         }
     }

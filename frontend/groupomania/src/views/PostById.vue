@@ -2,7 +2,7 @@
 <div class="container">
   <div class="post_container">
     <div class="info_post">
-       <span>{{this.username}}</span>
+       <span>{{this.username_publication}}</span>
        <span class="posted_at">Posted: {{this.created_at}}</span>
     </div>
     
@@ -10,24 +10,28 @@
         <h2></h2>
         <span></span>
         <img class="gif_img" alt="image">
+        <button class="btn_delete_publication" v-if="this.show_delete" @click="deteteComment">x</button>
         
-        <div class="likes">
-          <button class="like"></button>
-          <span class="like-counter" ></span>
-          <button class="dislike"></button>
-          <span class="dislike-counter"></span> 
+        <div class="interaction">
+                <div class="likes">
+                    <div class="like">
+                        <button @click="sendLike" class="like-btn"></button>
+                        <span class="like-counter" >{{this.like_count}}</span>
+                    </div>
+                    <div class="dislike">
+                        <button  @click="sendDislike" class="dislike-btn"></button>
+                        <span class="dislike-counter">{{this.dislike_count}}</span> 
+                    </div>
+                </div> 
         </div>
 
-        <Comments class="comment-section" v-for="(comms, index) in this.comment_list" :key="index" :comms="comms"/>
+        <Comments  v-for="(comms, index) in this.comment_list" :key="index" :prop="comms" class="comment-section"/>
 
-        <div class="hide">
           <div class="comment-field-container">
               <input class="comment_field" type="text" v-model ="comment_field"> 
-              <button @click="createComment">send</button>
+              <button @click="createComment">send</button>    
           </div> 
-        </div>
-
-        
+ 
         <button >test</button>
     </div>
   </div>
@@ -47,89 +51,138 @@ export default {
     },
     data(){ 
       return {
-        publication_by_id : localStorage.getItem('publicationById'),
-        username: null,
+        //get item from localStorage
+        publication_by_id : localStorage.getItem('publicationById'), 
+        created_at: localStorage.getItem('publicationByIdCreateAt'),
+        userID: localStorage.getItem('userID'),
+        user_publication: localStorage.getItem('publicationByUserId'),
+
+        //
+        username_publication: localStorage.getItem('usernamepublication'),
         comment_list: null,
         comment_field: null,
-        created_at: null,
-        userID: localStorage.getItem('userID'),
-        //commentdate: new Date(),        
+
+        //show button delete only if publication -> userID matches logged in user-> id
+        show_delete: localStorage.getItem('userID') === localStorage.getItem('publicationByUserId'),
+
+        // get like/dislike count from method get
+        dislike_count: parseInt(localStorage.getItem('total_dislikes')),
+        like_count: parseInt(localStorage.getItem('total_likes')),
+            
       }
     
     },
     methods:{
-       createComment() {
-         
-          const headers = { 
-                "Authorization": "Bearer " + localStorage.getItem('mytoken'),
-          };console.log(headers);
-          console.log(this.publication_by_id.data[0].id);
+      
+      createComment() {  
+      
+        axios
+          .post('/comments', {
+            userID : this.userID,
+            publicationID: this.publication_by_id,
+            comment_user: this.comment_field
+          })
+          .then(
+            response => {
+              console.log(response)
+            }
+          )
+          .catch(
+            error => console.log(error)
+          )
+        
+      },
+
+      sendLike() {
+    
+          this.like = 1,
+          this.dislike = 0
+          console.log('send like');
+          
+          axios
+          .post('likes',{
+              userID: this.userID,
+              publicationID: this.publication_by_id,
+              like: this.like,
+              dislike: this.dislike,
+          })
+          .then(
+              response => console.log(response)
+          )
+          .catch(
+              error => console.log(error)
+          )
+      },
+
+        sendDislike() { 
+     
+            this.like = 0,
+            this.dislike = 1
+            console.log('send dislike');
             axios
-            .post('/comments',
-                {
-                    userID: this.userID,
-                    publicationID: JSON.stringify(this.publication_by_id.data[0].id),
-                    commentaire: this.comment_field,               
-                }
-            )
+            .post('likes', {
+                userID: this.userID,
+                publicationID: this.publication_by_id,
+                like: this.like,
+                dislike: this.dislike,
+            })
             .then(
-                response => console.log(response)
+              response => console.log(response)
             )
-            .catch(
-                console.log('login to leave a comment')
-            )                 
+            .catch (
+              error => console.log(error)
+            )
         },
-    },
+},
+
+    
     mounted(){
-     /* const headers = { 
-                "Authorization": "Bearer " + localStorage.getItem('mytoken'),
-      }; */
 
-      axios.get('/publication/' + localStorage.getItem('publicationById'))
+      axios.get('/likes/total_likes/' + this.publication_by_id)
+                .then(
+                    response => {
+                      localStorage.setItem('total_likes', response.data.data[0].total_likes);
+                      }
+                )
+                .catch (       
+                    console.log('ERROR')
+                )
+          
+      axios.get('/likes/total_dislikes/' + this.publication_by_id)
+            
+                .then(
+                response => {
+                  localStorage.setItem('total_dislikes',response.data.data[0].total_dislikes )
+                }
+                ) 
+                .catch(
+                    console.log('ERROR')
+                )
+
+
+      //to get the username
+      axios
+      .get('/users/' + this.user_publication)
       .then(
-        response => {
-          console.log('PUBLICATION BY ID: ', response.data.data[0].userID);
-          this.publication_by_id = response.data;
-          this.userPublication = response.data.data[0].userID
-          localStorage.setItem('userPublication', response.data.data[0].userID );
-          this.created_at = response.data.data[0].created_at
-
+        response => { 
+          localStorage.setItem('usernamepublication', response.data.data[0].username)        
           }
       )
       .catch(
         error => console.log(error)
       )
+
+    //get comments list for the publication 
+    axios
+    .get('/comments/' + this.publication_by_id)
+    .then(
+      response => {
+        console.log('COMMENT LIST FOR PUBLICATION', response.data.data);
+        this.comment_list = response.data.data;
+      }
+    )
+    },
       
-
-      axios.get('/comments/' + this.publication_by_id)
-      .then(
-          response => {
-          console.log('COMMENT LIST: ', response)
-          this.comment_list = response.data.data;
-          var commentList = JSON.stringify(this.comment_list)
-          localStorage.setItem('commentList', commentList)},
-          
-      )
-      .catch(
-          console.log('ERROR')
-      )
-
-
-      axios
-      .get('/users/' + localStorage.getItem('userPublication'))
-      .then(
-        response => {
-          //console.log('DATA', response.data.data[0].username);
-          this.username = response.data.data[0].username;
-        }
-      )
-      .catch(
-        error => console.log(error)
-      )
-
-    }
-    
-
 }
 </script>
 
@@ -138,6 +191,7 @@ export default {
     display: flex;
     flex-direction: column;
     padding-bottom: 60px;
+    color: white;
 
   .post_container{
       display: flex;
@@ -162,6 +216,7 @@ export default {
         border-radius: 0px;
         align-self: center;
         margin-bottom: 20px;
+        position: relative;
    
 
           h2{
@@ -176,7 +231,16 @@ export default {
           color: black;
         
         }
-
+        .btn_delete_publication{
+          position: absolute;
+          right: 0;
+          top: 0;
+          margin-right: 5px;
+          font-size: 22px;
+          font-weight: bold;
+          background-color: transparent;
+          box-shadow: none;
+        }
         .gif_img{
           width: 100%;
           height: 200px;

@@ -39,7 +39,7 @@ exports.getLikesTotal = (req, res) => {
    // console.log('RECUP ID PUBLICATION:', req.params.publicationID);
     var publicationID = req.params.publicationID;
 
-    dbConnect.query('SELECT SUM(like_user) total_likes FROM likes WHERE publicationID=?', publicationID, (error, result) => {
+    dbConnect.query('SELECT IFNULL (SUM(like_user), 0) total_likes FROM likes WHERE publicationID=?', publicationID, (error, result) => {
         if(error) {
             res.json({
                 status: false, 
@@ -59,7 +59,7 @@ exports.getDislikesTotal = (req, res) => {
     //console.log('RECUP ID PUBLICATION:', req.params.publicationID);
     var publicationID = req.params.publicationID;
 
-    dbConnect.query('SELECT SUM(dislike_user) total_dislikes FROM likes WHERE publicationID=?', publicationID, (error, result) => {
+    dbConnect.query('SELECT IFNULL (SUM(dislike_user), 0) total_dislikes FROM likes WHERE publicationID=?', publicationID, (error, result) => {
         if(error) {
             res.json({
                 status: false, 
