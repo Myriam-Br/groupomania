@@ -14,9 +14,6 @@ router.get('/:id', publicationCtrl.publicationsById)
 router.post('/', multer, publicationCtrl.createPublication)
 
 //create new publication
-router.put('/:id', auth, multer, publicationCtrl.updatePublication)
-
-//create new publication
 router.delete('/:id', publicationCtrl.deletePublication)
 
 module.exports = router;

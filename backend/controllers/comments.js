@@ -60,3 +60,14 @@ exports.createComment = (req, res) => {
         }
     })
 }
+
+exports.deleteComment = (req, res) => {
+    dbConnect.query('DELETE FROM comments WHERE id=?', req.params.id, (error, result) =>{
+        if(error)
+            res.send(err)
+            res.json({
+                status:true,
+                message:"Comment deleted succesfully"
+            })
+    })
+}

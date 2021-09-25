@@ -5,9 +5,18 @@ const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
 const fileUpload = require('express-fileupload')
+const store = new session.MemoryStore();
 require('dotenv').config()
 const helmet = require('helmet')
 
+const SECRET = process.env.SESSION_SECRET_CODE;
+app.use(session({
+  secret: SECRET,
+  cookie: {maxAge: 30000},
+  saveUninitialized: false,
+  resave: false,
+  store
+}))
 
 app.use(fileUpload());
 app.use(helmet());
@@ -27,7 +36,6 @@ app.get('/', (req,res) => {
   console.log(store);
   console.log('session check: ',req.session);
 });
-
 
 
 //---------ROUTES DE MON APPLICATION-------//

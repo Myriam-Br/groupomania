@@ -20,6 +20,7 @@
                 </div> 
                 <button @click="showComments" class="show">comment</button>
             </div>
+            <span class="err_msg">{{this.msg_err_like}}</span>
          </div>
 
     </div>
@@ -58,8 +59,10 @@ export default {
             comment_list : null,
             comment_field: null,
             username: null,
-            //comment_count: null,
-            created_at: this.publication.created_at
+
+            //message error
+            msg_err_like: null
+
         }
     },
 
@@ -70,55 +73,55 @@ export default {
             console.log();
         }, 
         sendLike() {
-            /*
-            const headers = { 
-                "Authorization": "Bearer " + localStorage.getItem('mytoken'),
-            }; */
-            this.like = 1,
-            this.dislike = 0
-            console.log('send like');
-            axios
-            .post('likes',{
-                userID: this.userID,
-                publicationID: this.publication.id,
-                like: this.like,
-                dislike: this.dislike,
-            })
-            .then(
-                response => console.log(response)
-            )
-            .catch(
-                error => console.log(error)
-            )
+            if(this.userID) {
+                this.like = 1,
+                this.dislike = 0
+                console.log('send like');
+                axios
+                .post('likes',{
+                    userID: this.userID,
+                    publicationID: this.publication.id,
+                    like: this.like,
+                    dislike: this.dislike,
+                })
+                .then(
+                    response => console.log(response)
+                )
+                .catch(
+                    error => console.log(error)
+                )
+                
+            }else {
+                 this.msg_err_like = 'Please login to your account'
+            }
+          
         },
 
         sendDislike() { 
-            /*
-            const headers = { 
-                "Authorization": "Bearer " + localStorage.getItem('mytoken'),
-            }; */
-            //console.log(headers);
-            this.like = 0,
-            this.dislike = 1
-            console.log('send dislike');
-            axios
-            .post('likes', {
-                userID: this.userID,//from local storage -> account logged in
-                publicationID: this.publication.id,//from the forum page with get ('/publication')
-                like: this.like,
-                dislike: this.dislike,
-            })
+            if(this.userID){
+                this.like = 0,
+                this.dislike = 1
+                console.log('send dislike');
+                axios
+                .post('likes', {
+                    userID: this.userID,//from local storage -> account logged in
+                    publicationID: this.publication.id,//from the forum page with get ('/publication')
+                    like: this.like,
+                    dislike: this.dislike,
+                })           
+            }else {
+                this.msg_err_like = 'Please login to your account'
+            }
+           
         },
 
         
 
         showComments(){
-      
                 this.$router.push('/publication_by_id'); 
                 localStorage.setItem('publicationById', this.publication.id) ;
                 localStorage.setItem('publicationByIdCreateAt', this.publication.created_at);//display post date
-                localStorage.setItem('publicationByUserId', this.publication.userID);  //storage to display the username get('/users/:id) :id = localStorage.getItem('publicationByUserId')
-          
+                localStorage.setItem('publicationByUserId', this.publication.userID);  //storage to display the username get('/users/:id) :id = localStorage.getItem('publicationByUserId') 
         }
     },
 
@@ -156,6 +159,18 @@ export default {
                     response => {
                     this.username = response.data.data[0].username;
                     }
+                )
+                .catch(
+                    error => console.log(error)
+                )
+
+            axios.get('/users/' + this.userID)
+                .then(
+                    response => {
+                        console.log('RESULT',response.data.data[0].isAdmin);
+                        localStorage.setItem('isAdmin', response.data.data[0].isAdmin)
+                    }
+
                 )
                 .catch(
                     error => console.log(error)
@@ -230,6 +245,12 @@ export default {
        
         
         
+    }
+
+    .err_msg{
+        align-self: center;
+        color: rgb(187, 6, 51);
+        font-size: 15px;
     }
 
     

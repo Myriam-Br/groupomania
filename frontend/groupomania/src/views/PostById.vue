@@ -3,14 +3,15 @@
   <div class="post_container">
     <div class="info_post">
        <span>{{this.username_publication}}</span>
-       <span class="posted_at">Posted: {{this.created_at}}</span>
+       <span class="posted_at">Posted: {{this.publication_created_at}}</span>
     </div>
     
     <div class="post">
         <h2></h2>
         <span></span>
         <img class="gif_img" alt="image">
-        <button class="btn_delete_publication" v-if="this.show_delete" @click="deteteComment">x</button>
+        <button v-if="this.show_btn_delete_publication" @click="deletePublication" class="btn_delete">X</button>
+
         
         <div class="interaction">
                 <div class="likes">
@@ -25,14 +26,15 @@
                 </div> 
         </div>
 
-        <Comments  v-for="(comms, index) in this.comment_list" :key="index" :prop="comms" class="comment-section"/>
+        <Comments  v-for="(comms, index) in this.comment_list" :key="index" :comms="comms" class="comment-section"/>
 
           <div class="comment-field-container">
               <input class="comment_field" type="text" v-model ="comment_field"> 
               <button @click="createComment">send</button>    
           </div> 
+
+          <span class="err_msg">{{this.msg_err_like}}</span>
  
-        <button >test</button>
     </div>
   </div>
    
@@ -53,21 +55,25 @@ export default {
       return {
         //get item from localStorage
         publication_by_id : localStorage.getItem('publicationById'), 
-        created_at: localStorage.getItem('publicationByIdCreateAt'),
         userID: localStorage.getItem('userID'),
-        user_publication: localStorage.getItem('publicationByUserId'),
+        publication_created_at:null, 
+        publication_user_id: null,
+        user_id_publication: localStorage.getItem('publicationByUserId'),
 
         //
-        username_publication: localStorage.getItem('usernamepublication'),
+        username_publication: null,
         comment_list: null,
         comment_field: null,
-
-        //show button delete only if publication -> userID matches logged in user-> id
-        show_delete: localStorage.getItem('userID') === localStorage.getItem('publicationByUserId'),
+        show_btn_delete_publication: localStorage.getItem('userID')===localStorage.getItem('publicationByUserId') || localStorage.getItem('isAdmin')==1, 
 
         // get like/dislike count from method get
-        dislike_count: parseInt(localStorage.getItem('total_dislikes')),
-        like_count: parseInt(localStorage.getItem('total_likes')),
+        //likes section 
+        like_count: null,
+        dislike_count:null,
+        status: true,
+
+        //err mg
+        msg_err_like:null,
             
       }
     
@@ -94,7 +100,8 @@ export default {
       },
 
       sendLike() {
-    
+
+        if(this.userID){
           this.like = 1,
           this.dislike = 0
           console.log('send like');
@@ -107,74 +114,151 @@ export default {
               dislike: this.dislike,
           })
           .then(
-              response => console.log(response)
+              response => {
+                console.log('RESPONSE', response.data.status);
+                /*
+                this.status = response.data.status;    
+                if(this.status==false){
+                console.log(this.status);
+                axios
+                .delete('/likes/' + this.publication_by_id)
+                .then(
+                  response => console.log(response)
+                )
+                .catch(
+                  error => console.log(error)
+                )
+                }*/
+              }
           )
           .catch(
               error => console.log(error)
           )
+
+          
+
+        }else{
+            this.msg_err_like = 'Please login to your account'
+        }
+    
+          
       },
 
-        sendDislike() { 
-     
-            this.like = 0,
-            this.dislike = 1
-            console.log('send dislike');
-            axios
-            .post('likes', {
-                userID: this.userID,
-                publicationID: this.publication_by_id,
-                like: this.like,
-                dislike: this.dislike,
-            })
-            .then(
-              response => console.log(response)
-            )
-            .catch (
-              error => console.log(error)
-            )
-        },
+      sendDislike() { 
+        if(this.userID){
+          this.like = 0,
+          this.dislike = 1
+          console.log('send dislike');
+          axios
+          .post('likes', {
+              userID: this.userID,
+              publicationID: this.publication_by_id,
+              like: this.like,
+              dislike: this.dislike,
+          })
+          .then(
+            response => {
+              console.log(response);
+              /*
+              this.status = response.data.status; 
+              if(this.status==false){
+              console.log(this.status);
+              axios
+              .delete('/likes/' + this.publication_by_id)
+              .then(
+                response => console.log(response)
+              )
+              .catch(
+                error => console.log(error)
+              )
+              }*/
+
+              }
+          )
+          .catch (
+            error => console.log(error)
+          )
+        } else{
+          this.msg_err_like = 'Please login to your account'
+        }
+    
+         
+      },
+
+      deletePublication(){
+        console.log('btn to delete publication');
+        axios
+        .delete('/publication/' + localStorage.getItem('publicationById'))
+        .then(
+          response => console.log(response)
+        )
+        .catch(
+          error => console.log(error)
+        )
+      }
 },
 
     
     mounted(){
 
+      //get publication by id
+
+      axios.get('/publication/' + this.publication_by_id)
+      .then(
+        response => {
+          console.log('publicationById', response.data.data[0].created_at);
+          this.publication_created_at = response.data.data[0].created_at;
+          this.publication_user_id = response.data.data[0].userID;
+          localStorage.setItem('user_id_publication_for_username',response.data.data[0].userID)
+          }
+        
+      )
+      .catch(
+
+      )
+
       axios.get('/likes/total_likes/' + this.publication_by_id)
                 .then(
                     response => {
-                      localStorage.setItem('total_likes', response.data.data[0].total_likes);
-                      }
+                        this.like_count = response.data.data[0].total_likes
+                    }
                 )
                 .catch (       
                     console.log('ERROR')
                 )
-          
+    
       axios.get('/likes/total_dislikes/' + this.publication_by_id)
-            
-                .then(
-                response => {
-                  localStorage.setItem('total_dislikes',response.data.data[0].total_dislikes )
-                }
-                ) 
-                .catch(
-                    console.log('ERROR')
-                )
+      
+          .then(
+          response =>  {
+              console.log(response.data.data[0].total_dislikes);
+              this.dislike_count = response.data.data[0].total_dislikes;  
+
+              }
+          ) 
+          .catch(
+              console.log('ERROR')
+          )
+
 
 
       //to get the username
       axios
-      .get('/users/' + this.user_publication)
+      .get('/users/' + localStorage.getItem('user_id_publication_for_username'))
       .then(
         response => { 
-          localStorage.setItem('usernamepublication', response.data.data[0].username)        
+          console.log(response.data.data[0].username);   
+          this.username_publication = response.data.data[0].username;   
           }
       )
       .catch(
         error => console.log(error)
       )
 
+
     //get comments list for the publication 
     axios
-    .get('/comments/' + this.publication_by_id)
+    .get('/comments/' + localStorage.getItem('publicationById'))
     .then(
       response => {
         console.log('COMMENT LIST FOR PUBLICATION', response.data.data);
@@ -231,7 +315,7 @@ export default {
           color: black;
         
         }
-        .btn_delete_publication{
+        .btn_delete{
           position: absolute;
           right: 0;
           top: 0;
@@ -253,6 +337,11 @@ export default {
               width: 99%;  
           }
 
+        }
+        .err_msg{
+        align-self: center;
+        color: rgb(187, 6, 51);
+        font-size: 15px;
         }
       }
   }

@@ -111,10 +111,18 @@ exports.likePublication =  (req, res) => {
             }  
         })
     }else if(likes.like_user==1 && likes.dislike_user==1) {
-        console.log("can't like and dislike the same publication");
-        res.json({
-            message:"can't like & dislike the same publication"
-        })
+        dbConnect.query('DELETE FROM likes WHERE publicationID=?', publicationID, (error, result) => {
+            if(error)
+                res.send(err)
+                res.json({
+                    status:true,
+                    message:"like|dislike deleted successfully"
+                })
+         })
+    console.log("can't like and dislike the same publication");
+    res.json({
+        message:"can't like & dislike the same publication"
+    })
     }else {
         console.log('something went wrong');
         res.json({
@@ -123,52 +131,7 @@ exports.likePublication =  (req, res) => {
     }
 }
 
-/*
-exports.sendLike = (req, res) => {
-  
-    var userLiked = {
-        userID: req.body.userID,
-        publicationID:req.params.publicationID,
-        like_user: 1,
-        dislike_user: 0,
-    };
-  
-    dbConnect.query('INSERT INTO likes SET ?',  userLiked, (error, result) => {
-        if(error) {
-            res.json({
-                status: false, 
-                message: 'there are some error with query'})
-        }else {
-            res.json({
-                status: true,
-                data: result,
-                message : 'like added to publication successfully'})
-        }    
-    })
-}
 
-exports.sendDislike = (req, res) => {
-  
-    var userDisliked = {
-        userID: req.body.userID,
-        publicationID:req.params.publicationID,
-        like_user: 0,
-        dislike_user: 1,
-    };
-  
-    dbConnect.query('INSERT INTO likes SET ?',  userDisliked, (error, result) => {
-        if(error) {
-            res.json({
-                status: false, 
-                message: 'there are some error with query'})
-        }else {
-            res.json({
-                status: true,
-                data: result,
-                message : 'dislike added to publication successfully'})
-        }    
-    })
-}*/
 
 
 

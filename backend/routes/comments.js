@@ -16,6 +16,9 @@ router.get('/:publicationID',  commentsCtrl.getCommentByPublication);
 //create new comments
 router.post('/', commentsCtrl.createComment);
 
+//create new comments
+router.delete('/:id', commentsCtrl.deleteComment);
+
 
 
 

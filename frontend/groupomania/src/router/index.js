@@ -8,7 +8,7 @@ import Account from '../views/Account';
 import EditProfil from '../views/EditProfil';
 import SignUp from '../views/SignUp';
 import SignIn from '../views/SignIn';
-import ForgotPassword from '../views/ForgotPassword';
+
 
 
 
@@ -56,11 +56,6 @@ const routes = [
     name: "signin",
     component: SignIn
   },
-  {
-    path: "/forgotpassword",
-    name: "forgotpassword",
-    component: ForgotPassword
-  }
 ];
 
 const router = new VueRouter({

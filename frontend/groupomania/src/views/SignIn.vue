@@ -13,11 +13,6 @@
         Don't have an account? 
         <router-link class="link link-to-signup" :to="{ name : 'signup'}">Sign up</router-link>  
       </p>
-      <p class="forgotpw-msg">
-           Forgot your password?
-        <router-link class="link link-to-resetpw" :to="{ name : 'forgotpassword'}">Reset password</router-link>
-      </p>
-
 
   </div>
 </template>
@@ -60,8 +55,9 @@ export default {
             localStorage.setItem('username',username);
             var email = response.data.data.user.email;
             //console.log(email);
-            localStorage.setItem('email',email);
-        }
+            localStorage.setItem('email',email);     
+        },
+  
     }
 }
 </script>

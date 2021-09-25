@@ -1,8 +1,8 @@
 <template>
   <div class="comment-container">  
             <p class="username">{{this.username_of_publication}}</p>
-            <p class="comment">{{this.comment_of_user}}</p>
-            <button class="delete_comment" >X</button>
+            <p class="comment">{{comms.comment_user}}</p>
+            <button v-if="this.user_id==this.userID || localStorage.getItem('isAdmin')==1" @click="deleteComment" class="delete_comment" >X</button>
   </div>
 </template>
 
@@ -14,13 +14,12 @@ export default {
 
     data() {
         return{
-            comment_of_user: this.comms.comment_user,
-            user_comment_id: this.comms.userID,
+            comment_of_user: null,
+            user_id: this.comms.userID,
             userID: localStorage.getItem('userID'),
             publicationID: this.comms.publicationID,
             username_of_publication: null, //get with user_comment_id
-
-            
+            comment_id: this.comms.id,
         };    
     },
 
@@ -28,17 +27,15 @@ export default {
 
        //get username
        axios
-       .get('/users/' + this.user_comment_id )
+       .get('/users/' + this.comms.userID)
        .then(
-           response => {
+           response => {     
                //console.log('comment reponse', response.data.data[0].username);
                this.username_of_publication = response.data.data[0].username;
-               console.log('comment reponse', response.data);
                }
-
        )
        .catch(
-
+           error => console.log(error)
        )
     
 
@@ -46,6 +43,18 @@ export default {
 
    methods: {
        //post a comment
+       deleteComment() {
+           axios
+           .delete('/comments/' + this.comment_id)
+           .then(
+               response => console.log(response)
+               
+           )
+           .catch(
+               error => console.log(error)
+           )
+
+       }
       
 
     
@@ -61,6 +70,7 @@ export default {
         display: flex; 
         background-color: azure;
         position: relative;
+        color: black;
         p{
             margin-right: 30px;
         }

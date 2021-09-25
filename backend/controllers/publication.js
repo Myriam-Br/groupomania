@@ -1,5 +1,6 @@
 const dbConnect = require('../database');
 const Publication = require('../models/Publication');
+
 //const multer = require('../middlewares/multer_config')
 
 //imageUrl:`${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
@@ -41,40 +42,6 @@ exports.publicationsById = (req, res) => {
 //create publication
 exports.createPublication = (req, res) => {
 
-    /*
-    //var today = new Date()
-    let imageUrl;
-    let uploadPath;
-  
-    if(!req.files || Object.keys(req.files).length === 0){
-       res.status(400).send('no file were uploaded')
-    } else{
-        
-    }
-  
-    //name of the input is imageUrl
-    imageUrl = req.files.imageUrl;
-    uploadPath = __dirname + '/images/' + imageUrl.name;
-    //console.log(sampleFile);
-    console.log(req.files.imageUrl);
-  
-
-    
-    //console.log(req);
-   // console.log(publication.created_at);
-   
-   // console.log( 'img:',req.file);
-
-    //use mv() 
-    imageUrl.mv(uploadPath, function(err) {
-        if(err) {
-            return res.status(500).send(err);
-        } else {
-            res.send('File uploaded'); 
-           
-        }      
-
-    }) */
 
     const publication = new Publication({
         userID : req.body.userID,
@@ -97,32 +64,53 @@ exports.createPublication = (req, res) => {
 
 }
 
-//update publication
-exports.updatePublication = (req, res) => {
-    var publications = new Publication(req.body);
-    dbConnect.query('UPDATE publication SET userID=?,title=?,created_at=? WHERE id=?', req.params.id, publications, (error, result) => {
-        if(error) {
-            res.json({
-                status: false, 
-                message: 'there are some error with query'})
-        }else {
-            res.json({
-                status: true,
-                data: result,
-                message : 'publication updated successfully'})
-        }    
-    })
-}
-
 
 //delete publication
 exports.deletePublication = (req, res) => {
-    dbConnect.query('DELETE FROM publication WHERE id=?', req.params.id, (error, result) => {
-        if(error)
-            res.send(err)
+    var user_id = req.body.userID;
+    //var isAdmin = req.body.isAdmin;
+    dbConnect.query('SELECT isAdmin, userID FROM user, publication WHERE userID=?', user_id, (error, result)=>{
+        if (error) {
+            console.log(error);
+        }else {
+
             res.json({
-                status:true,
-                message:"Publication deleted succesfully"
+                status: true,
+                data: result,
+                message : 'TEST'
+              
             })
+          console.log(result[0].isAdmin==1);
+          if(result[0].isAdmin==1 || result[0].userID==req.body.userID){
+              console.log('je fonctionne');
+
+                dbConnect.query('DELETE FROM publication WHERE id=?', req.params.id, (error, result) => {
+                    if(error){  
+                        res.send(error)
+                    }else{
+                        res.json({
+                            status:true,
+                            message:"Publication deleted succesfully",
+                            data: result
+                        })
+                    }
+    
+                })
+                 
+          } else{
+              console.log('ERROR');
+          }
+
+           
+           
+        }
     })
+
+ 
+
+
+
+  
+     
+
 }

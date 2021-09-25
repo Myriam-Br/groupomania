@@ -16,7 +16,6 @@
         <button @click="register"  class="btn-signup">Sign up</button>
       </form>
       
-
       <div class="error"></div>
       <p class="signin-msg">
         Already have an account?

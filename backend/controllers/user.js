@@ -93,14 +93,29 @@ exports.register = async(req, res) => {
 
 //recup login method get
 exports.loginAuth = (req, res) => {
-    
+    console.log(req.session);
+    if(req.session.authentificated) {
+        res.json({
+            code:200,
+            message: "Logged in successfully !",
+            data: req.session,
+        })
+    } else {
+        res.json({
+            message: "Account not logged in!",
+            data: req.session
+        })
+    }
+   
 }
 
 exports.login = async(req, res) => {
-
+    console.log(req.sessionID);
+    console.log('payload',req.payload);
     var email = req.body.email;
     var password = req.body.password;
-
+    console.log(password);
+    console.log('params', req.params.isAdmin);
 
 
     try{
@@ -113,16 +128,21 @@ exports.login = async(req, res) => {
                         })
             }else{
                 if(result.length > 0){
-                 
+                    if(req.session.authentificated){
+                        res.json(req.session)
+                    } else{
+
                         const compPwd =  await  bcrypt.compare(password, result[0].password); 
                         //console.log('pwd to compare',result[0].password);
                         //console.log('pwd compare',compPwd);
                         if(compPwd){
                             const MYTOKEN = process.env.TOKEN;
+                            req.session.authentificated = true;
                             res.json({
                                 status: true,
                                 code: 200,
                                 message: 'successfully authenticated',
+                                data: req.session,
                                 userID : result[0].id,
                                 username : result[0].username,
                                 token: jwt.sign (
@@ -141,6 +161,13 @@ exports.login = async(req, res) => {
                             });
                         }         
                     }
+                     
+                }else{
+                res.json({
+                    status:false,   
+                    message:"Email does not exits"
+                });
+                }
             }        
         })
     }catch{
@@ -148,28 +175,6 @@ exports.login = async(req, res) => {
     }   
 }
 
-//modify account
-/*
-exports.updateAccount = (req, res) => {
-       var user = {
-           email: req.body.email,
-           username: req.body.username,
-       }
-       console.log(user);
-        dbConnect.query('UPDATE user SET username=?,email=? WHERE id=?', req.params.id, user, (error, result) => {
-            if(error){
-                res.json({
-                    message:"something went wrong with queries"
-                })
-            } else{
-                res.json({
-                    message:"account updated successfully",
-                    data: result,
-                })
-            }
-        })
-
-}*/
 
 //destroy session
 exports.logout = (req, res) =>{

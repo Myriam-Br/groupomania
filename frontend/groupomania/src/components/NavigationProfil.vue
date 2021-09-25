@@ -40,16 +40,14 @@ export default {
        axios.get('http://localhost:8080/api/users/logout')
     .then(
       response => console.log(response),
-      this.$router.push('/') 
+     
     )
     .catch(
       error => console.log(error)
     )
 
-    localStorage.removeItem("mytoken");
-    localStorage.removeItem("userID");
-    localStorage.removeItem("email");
-    localStorage.removeItem("username");
+    this.$router.push('/') 
+    localStorage.clear()
     }
   }
 
@@ -64,8 +62,8 @@ export default {
   background-color: rgb(46, 53, 58);
   display: flex;
   justify-content: space-between;
-
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.534);
+  margin-bottom: 50px;
 
   .logo{
     margin: 18px 20px;

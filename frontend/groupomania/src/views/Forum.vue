@@ -46,8 +46,7 @@ export default {
       .then(
         response => {
           this.publications = response.data.data,
-          console.log('publication by ID',this.publications);
-          console.log('CHECK USER ID: ',this.publications.userID);    
+          console.log('publication by ID',this.publications);   
         }    
       )
     
