@@ -46,9 +46,10 @@ exports.createPublication = (req, res) => {
     const publication = new Publication({
         userID : req.body.userID,
         title : req.body.title,
-        imageUrl : req.body.imageUrl,
+        imageUrl : req.files.imageUrl.name,
     }); 
-
+    console.log(req.files.imageUrl.name);
+    console.log(publication);
     dbConnect.query('INSERT INTO publication SET ?', publication, (error, result) => {
         if(error) {
             res.json({
@@ -67,50 +68,23 @@ exports.createPublication = (req, res) => {
 
 //delete publication
 exports.deletePublication = (req, res) => {
-    var user_id = req.body.userID;
-    //var isAdmin = req.body.isAdmin;
-    dbConnect.query('SELECT isAdmin, userID FROM user, publication WHERE userID=?', user_id, (error, result)=>{
-        if (error) {
-            console.log(error);
-        }else {
+    const userID = parseInt(req.body.userID);
 
-            res.json({
-                status: true,
-                data: result,
-                message : 'TEST'
-              
+    dbConnect.query('SELECT * FROM publication WHERE id=? and userID=?', [req.params.id,userID], async(error, result) => {
+         // si on trouve un resultat alors user connecté = autor donc on suppr la publication
+        // sinon on teste si user connecté = admin :
+        dbConnect.query('SELECT * FROM user WHERE id=? and isAdmin=1', [userID], async(error, result) => {
+            dbConnect.query('DELETE FROM publication WHERE id=?', req.params.id, (error, result) => {
+                if(error){  
+                    res.send(error)
+                }else{
+                    res.json({
+                        status:true,
+                        message:"Publication deleted succesfully",
+                        data: result
+                    })
+                }        
             })
-          console.log(result[0].isAdmin==1);
-          if(result[0].isAdmin==1 || result[0].userID==req.body.userID){
-              console.log('je fonctionne');
-
-                dbConnect.query('DELETE FROM publication WHERE id=?', req.params.id, (error, result) => {
-                    if(error){  
-                        res.send(error)
-                    }else{
-                        res.json({
-                            status:true,
-                            message:"Publication deleted succesfully",
-                            data: result
-                        })
-                    }
-    
-                })
-                 
-          } else{
-              console.log('ERROR');
-          }
-
-           
-           
-        }
+        })
     })
-
- 
-
-
-
-  
-     
-
 }

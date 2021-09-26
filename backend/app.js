@@ -16,7 +16,8 @@ app.use(session({
   saveUninitialized: false,
   resave: false,
   store
-}))
+}));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use(fileUpload());
 app.use(helmet());

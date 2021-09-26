@@ -110,13 +110,9 @@ exports.loginAuth = (req, res) => {
 }
 
 exports.login = async(req, res) => {
-    console.log(req.sessionID);
-    console.log('payload',req.payload);
+    console.log('session userid: ',req.sessionID);
     var email = req.body.email;
     var password = req.body.password;
-    console.log(password);
-    console.log('params', req.params.isAdmin);
-
 
     try{
         dbConnect.query('SELECT * FROM user WHERE email=?', [email], async(error, result) => {
@@ -179,6 +175,7 @@ exports.login = async(req, res) => {
 //destroy session
 exports.logout = (req, res) =>{
     console.log('before loggout session: ',req.session);
+    /*
     req.session.destroy(function(err){
         if(err){
            console.log(err);
@@ -191,7 +188,7 @@ exports.logout = (req, res) =>{
             console.log('after loggout session: ',req.session);
         }
 
-     });
+     });*/
 }
     
 

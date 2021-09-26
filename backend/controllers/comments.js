@@ -62,12 +62,22 @@ exports.createComment = (req, res) => {
 }
 
 exports.deleteComment = (req, res) => {
-    dbConnect.query('DELETE FROM comments WHERE id=?', req.params.id, (error, result) =>{
-        if(error)
-            res.send(err)
-            res.json({
-                status:true,
-                message:"Comment deleted succesfully"
+    const userID = parseInt(req.body.userID);
+
+    dbConnect.query('SELECT * FROM publication WHERE id=? and userID=?', [req.params.id,userID], async(error, result) => {
+         // si on trouve un resultat alors user connecté = autor donc on suppr le commentaire
+        // sinon on teste si user connecté = admin :
+        dbConnect.query('SELECT * FROM user WHERE id=? and isAdmin=1', [userID], async(error, result) => {
+            dbConnect.query('DELETE FROM comments WHERE id=?', req.params.id, (error, result) =>{
+                if(error)
+                    res.send(err)
+                    res.json({
+                        status:true,
+                        message:"Comment deleted succesfully",
+                        data: result,
+                    })
             })
+        })
     })
+   
 }

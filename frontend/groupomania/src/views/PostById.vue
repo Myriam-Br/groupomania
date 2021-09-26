@@ -26,7 +26,7 @@
                 </div> 
         </div>
 
-        <Comments  v-for="(comms, index) in this.comment_list" :key="index" :comms="comms" class="comment-section"/>
+        <Comments  v-for="(comment_field, index) in this.comment_list" :key="index" :comment_field="comment_field" class="comment-section"/>
 
           <div class="comment-field-container">
               <input class="comment_field" type="text" v-model ="comment_field"> 
@@ -90,7 +90,8 @@ export default {
           })
           .then(
             response => {
-              console.log(response)
+              console.log(response);
+              
             }
           )
           .catch(

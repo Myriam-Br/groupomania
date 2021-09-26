@@ -1,8 +1,10 @@
 <template>
   <div class="comment-container">  
             <p class="username">{{this.username_of_publication}}</p>
-            <p class="comment">{{comms.comment_user}}</p>
-            <button v-if="this.user_id==this.userID || localStorage.getItem('isAdmin')==1" @click="deleteComment" class="delete_comment" >X</button>
+            <p class="comment">{{comment_field.comment_user}}</p>
+            <p class="comment">{{comment_field.id}}</p>
+            <span>{{comment_field.userID}}</span>
+            <button v-if="this.user_id==this.userID" @click="deleteComment" class="delete_comment" >X</button>
   </div>
 </template>
 
@@ -10,16 +12,16 @@
 import axios from "axios"
 export default {
     name: "comments",
-    props:[ "comms"], 
+    props:[ "comment_field"], 
 
     data() {
         return{
             comment_of_user: null,
-            user_id: this.comms.userID,
+            user_id: this.comment_field.userID,
             userID: localStorage.getItem('userID'),
-            publicationID: this.comms.publicationID,
+            publicationID: this.comment_field.publicationID,
             username_of_publication: null, //get with user_comment_id
-            comment_id: this.comms.id,
+            comment_id: this.comment_field.id,
         };    
     },
 
@@ -27,11 +29,12 @@ export default {
 
        //get username
        axios
-       .get('/users/' + this.comms.userID)
+       .get('/users/' + this.user_id)
        .then(
            response => {     
                //console.log('comment reponse', response.data.data[0].username);
                this.username_of_publication = response.data.data[0].username;
+               
                }
        )
        .catch(

@@ -39,15 +39,27 @@ export default {
     methods: {
           async register() { 
             //send request
-            const response =  await axios.post('users/register', {
+            await axios.post('users/register', {
               username: this.username,
               email: this.email,
               password : this.password,
-            }); 
+            }) 
+            .then(
+              response => {
+                console.log(response);
+                this.$router.push('/signin')
+              }
+            )
+            .catch(
+              error => {
+                console.log(error);
+                this.$router.push('/signup')
+              }
+            )
 
-            console.log(response);
+           
         
-            this.$router.push('/signin')
+            
               
           } 
     }

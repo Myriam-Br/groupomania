@@ -56,6 +56,7 @@ export default {
             var email = response.data.data.user.email;
             //console.log(email);
             localStorage.setItem('email',email);     
+            
         },
   
     }

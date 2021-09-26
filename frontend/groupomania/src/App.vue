@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <header>
-      <NavigationProfil/>
+      <navigationProfil></navigationProfil>
+      
     </header>  
     <router-view class="view-container"></router-view>
     <footer>
@@ -12,6 +13,7 @@
 
 <script>
 import NavigationProfil from "./components/NavigationProfil";
+
 //import Navigation from "./components/Navigation";
 //import Footer from "./components/Footer";
 
@@ -19,7 +21,7 @@ import NavigationProfil from "./components/NavigationProfil";
 export default {
   name: "app",
   components:{
-    NavigationProfil,
+    NavigationProfil
   
   },
   data() {

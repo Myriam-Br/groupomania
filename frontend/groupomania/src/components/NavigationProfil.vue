@@ -23,7 +23,8 @@
 <script>
 import axios from "axios"
 export default {
-  name: 'navigationProfil', 
+  name: 'navigationProfil',
+ 
   components :{
 
   },
@@ -37,7 +38,7 @@ export default {
 
   methods :{
     logout() {
-       axios.get('http://localhost:8080/api/users/logout')
+       axios.get('/users/logout')
     .then(
       response => console.log(response),
      

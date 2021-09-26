@@ -30,9 +30,6 @@
 
 <script>
 import axios from 'axios'
-//import Comments from "../components/Comments"
-//import { response } from 'express'
-//import Likes from "../components/Likes"
 export default {
     props:["publication"],
 
@@ -164,17 +161,24 @@ export default {
                     error => console.log(error)
                 )
 
-            axios.get('/users/' + this.userID)
-                .then(
-                    response => {
-                        console.log('RESULT',response.data.data[0].isAdmin);
-                        localStorage.setItem('isAdmin', response.data.data[0].isAdmin)
-                    }
+                if(this.userID){
+                    axios.get('/users/' + this.userID)
+                            .then(
+                                response => {
+                                    console.log('RESULT', parseInt(response.data.data[0].isAdmin));
+                                    localStorage.setItem('isAdmin', response.data.data[0].isAdmin)
+                                }
 
-                )
-                .catch(
-                    error => console.log(error)
-                )
+                            )
+                            .catch(
+                                error => console.log(error)
+                            )
+
+                }else{
+                    console.log('error');
+                }
+
+          
 
     }
 }
