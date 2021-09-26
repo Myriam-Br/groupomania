@@ -1,13 +1,14 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Test from '../views/Test';
 import Forum from '../views/Forum';
 import CreatePost from '../views/CreatePost';
 import PostById from '../views/PostById';
 import Account from '../views/Account';
-import EditProfil from '../views/EditProfil';
+import DeleteAccount from '../views/DeleteAccount';
 import SignUp from '../views/SignUp';
+import SignUpAdmin from '../views/SignUpAdmin';
 import SignIn from '../views/SignIn';
+import ConfirmDelete from '../views/DeleteAccountConfirm';
 
 
 
@@ -20,11 +21,6 @@ const routes = [
     path: "/",
     name: "forum",
     component: Forum
-  },
-  {
-    path: "/test",
-    name: "test",
-    component: Test
   },
   {
     path: "/createpost",
@@ -42,14 +38,24 @@ const routes = [
     component: Account
   },
   {
-    path: "/editprofil",
-    name: "editprofil",
-    component: EditProfil
+    path: "/deleteaccount",
+    name: "deleteaccount",
+    component: DeleteAccount
+  },
+  {
+    path: "/delete_account_confirmation",
+    name: "deleteconfirmation",
+    component: ConfirmDelete
   },
   {
     path: "/signup",
     name: "signup",
     component: SignUp
+  },
+  {
+    path: "/signupa_dmmin",
+    name: "signupadmmin",
+    component: SignUpAdmin,
   },
   {
     path: "/signin",

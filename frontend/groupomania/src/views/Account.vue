@@ -1,48 +1,99 @@
 <template>
-<div class="container profil-user">
-    <h1>MY PROFIL</h1>
-    <p><font-awesome-icon icon="fa-solid fa-power-off" /></p>
-    <div class="profil-info">
-        <p class="username">{{this.username}}</p>
-        <p class="email">{{this.email}}</p>
+<div>
+    <div class="container profil-user">
+
+    <div class="profil">
+      
+        <button @click="deleteAccount" class="delete" >Delete account</button>    
     </div>
-    <router-link class="edit-profil link" :to="{ name : 'editprofil'}">Edit</router-link> <br>
+       
+    </div>
 </div>
   
 </template>
 
 <script>
-//import axios from 'axios'
-
+import axios from 'axios'
 export default {
-    name:"account",
-    
+    name:"editprofil",
     data() {
         return {
-            username: localStorage.getItem('username'),
-            email: localStorage.getItem('email'),
-
-        }
+            email: null,
+            username: null,
+        }        
     },
 
-  
+    methods: {
+        deleteAccount() {
+            axios.delete('/users/' + localStorage.getItem('userID'))
+            .then(
+                response => console.log(response)
 
+            )
+            .catch(
+               error => console.log(error)
+            )
+
+            localStorage.removeItem("mytoken");
+            localStorage.removeItem("userID");
+            localStorage.removeItem("email");
+            localStorage.removeItem("username");
+            this.$router.push('/');  
+            location.reload()
+        },
+    /*
+        updateAccount() {
+             axios.put('/users/' + localStorage.getItem('userID'), {
+                email: this.email,
+                username: this.username,
+             });
+
+        }
+    */   
+
+
+       
+    }
 
 }
 </script>
 
 <style lang="scss" scoped>
-    .container{
-        font-size: 16px;
-        color: white;
-
-        .profil-info{
-            margin-bottom: 20px;
-   
-        }
-        .edit-profil{
-            align-self: center;
-            color: white;
-        }
+.profil-user{
+    
+    width: 100%;
+    color: white;
+    .profil{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
+
+    .profil-info{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+            input{
+                width: auto;
+                overflow: auto;
+                outline: none;
+                margin-bottom: 5px;
+            }
+    }
+
+    .delete{
+         background-color: rgb(208, 227, 236);
+        width: 200px;
+        align-self: center;
+        margin-top: 50px;
+       
+    }
+
+      
+   
+}
+            
+
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <navigationProfil></navigationProfil>
+      <navigationProfil class="navigation"></navigationProfil>
       
     </header>  
     <router-view class="view-container"></router-view>
@@ -80,6 +80,12 @@ body{
 li{
   list-style: none;
 }
+.navigation{
+  width: 100%;
+  display: flex;
+}
+
+
 
 .link{
     text-decoration: none;
@@ -108,7 +114,6 @@ position: absolute;
 bottom: 0%;
 right: 0%;
 left: 0%;
-background-color: aquamarine;
 align-self: center;
 }
  .likes{

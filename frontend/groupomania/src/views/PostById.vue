@@ -9,7 +9,8 @@
     <div class="post">
         <h2></h2>
         <span></span>
-        <img class="gif_img" alt="image">
+        <img  class="gif_img" alt="image">
+        <span class="img_url">{{this.publication_image_url}}</span>
         <button v-if="this.show_btn_delete_publication" @click="deletePublication" class="btn_delete">X</button>
 
         
@@ -33,7 +34,8 @@
               <button @click="createComment">send</button>    
           </div> 
 
-          <span class="err_msg">{{this.msg_err_like}}</span>
+          <span class="err_msg">{{this.msg_err}}</span>
+
  
     </div>
   </div>
@@ -58,6 +60,7 @@ export default {
         userID: localStorage.getItem('userID'),
         publication_created_at:null, 
         publication_user_id: null,
+        publication_image_url: localStorage.getItem('publicationByIdImage'),
         user_id_publication: localStorage.getItem('publicationByUserId'),
 
         //
@@ -73,7 +76,9 @@ export default {
         status: true,
 
         //err mg
-        msg_err_like:null,
+        msg_err:null,
+
+   
             
       }
     
@@ -81,17 +86,26 @@ export default {
     methods:{
       
       createComment() {  
+         const headers= {
+            "Authorization": "Bearer" +' '+ localStorage.getItem('mytoken'),
+          };
       
         axios
           .post('/comments', {
             userID : this.userID,
             publicationID: this.publication_by_id,
             comment_user: this.comment_field
-          })
+          }, { "headers" : headers})
           .then(
             response => {
-              console.log(response);
-              
+              console.log(response.data.status);
+              location.reload()
+              if(response.data.status==false){
+                this.msg_err = 'Please login to your account';       
+              }else{
+                console.log('comment saved successfully');
+              }
+             
             }
           )
           .catch(
@@ -106,31 +120,24 @@ export default {
           this.like = 1,
           this.dislike = 0
           console.log('send like');
+          const headers= {
+            "Authorization": "Bearer" + ' ' + localStorage.getItem('mytoken'),
+            'Content-Type' : 'multipart/form-data'
+          };console.log(headers);
           
           axios
           .post('likes',{
               userID: this.userID,
               publicationID: this.publication_by_id,
-              like: this.like,
-              dislike: this.dislike,
-          })
+              like_user: this.like,
+              dislike_user: this.dislike,
+          }, {"headers" : headers})
           .then(
               response => {
                 console.log('RESPONSE', response.data.status);
-                /*
-                this.status = response.data.status;    
-                if(this.status==false){
-                console.log(this.status);
-                axios
-                .delete('/likes/' + this.publication_by_id)
-                .then(
-                  response => console.log(response)
-                )
-                .catch(
-                  error => console.log(error)
-                )
-                }*/
+                location.reload()
               }
+              
           )
           .catch(
               error => console.log(error)
@@ -139,7 +146,7 @@ export default {
           
 
         }else{
-            this.msg_err_like = 'Please login to your account'
+            this.msg_err = 'Please login to your account'
         }
     
           
@@ -150,29 +157,21 @@ export default {
           this.like = 0,
           this.dislike = 1
           console.log('send dislike');
+          const headers= {
+             "Authorization": "Bearer" + ' ' + localStorage.getItem('mytoken'),
+            'Content-Type' : 'multipart/form-data'
+          };console.log(headers);
           axios
           .post('likes', {
               userID: this.userID,
               publicationID: this.publication_by_id,
-              like: this.like,
-              dislike: this.dislike,
-          })
+              like_user: this.like,
+              dislike_user: this.dislike,
+          }, {"headers" : headers})
           .then(
             response => {
               console.log(response);
-              /*
-              this.status = response.data.status; 
-              if(this.status==false){
-              console.log(this.status);
-              axios
-              .delete('/likes/' + this.publication_by_id)
-              .then(
-                response => console.log(response)
-              )
-              .catch(
-                error => console.log(error)
-              )
-              }*/
+              location.reload()
 
               }
           )
@@ -180,18 +179,25 @@ export default {
             error => console.log(error)
           )
         } else{
-          this.msg_err_like = 'Please login to your account'
+          this.msg_err= 'Please login to your account'
         }
     
          
       },
 
       deletePublication(){
+         const headers= {
+            "Authorization": "Bearer" + ' ' + localStorage.getItem('mytoken'),
+            'Content-Type' : 'multipart/form-data'
+          };console.log(headers);
         console.log('btn to delete publication');
         axios
-        .delete('/publication/' + localStorage.getItem('publicationById'))
+        .delete('/publication/' + localStorage.getItem('publicationById'), {"headers" : headers})
         .then(
-          response => console.log(response)
+          response => {
+            console.log(response);
+            this.$router.push('/')
+          }
         )
         .catch(
           error => console.log(error)
@@ -280,8 +286,9 @@ export default {
 
   .post_container{
       display: flex;
-      flex-direction: column;   
-      padding: 0px 15%;
+      flex-direction: column;  
+      align-self: center; 
+      width: 80%;
 
       .info_post{
         span{

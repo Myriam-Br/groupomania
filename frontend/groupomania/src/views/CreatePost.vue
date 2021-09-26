@@ -1,16 +1,17 @@
 <template>
-<div class="upload-gif">
+<div class="upload-gif container">
     <h1>Create post</h1>
 
     <div class="gif-container">
         <h2>create your post</h2>
         
         <input class="publication_title" type="text" v-model="title_publication">
-        <img class="file_preview" src="" alt="">
+        <img class="file_preview" :src="this.preview" alt="">
         <input @change="onFileChange" class="file_select" type="file" name="imageUrl" accept='image/*'/>  
-        <button @click="onUploadFile"   class="btn-create">Submit</button> 
-        
+        <button @click="onUploadFile"   class="btn-create">Submit</button>      
     </div>  
+
+    <span class="msg_err">{{this.errMsg}}</span>
 
 </div>
 </template>
@@ -29,6 +30,7 @@ export default {
             image: null,
             userID :localStorage.getItem('userID'), 
             show_delete: null,
+            errMsg: null
         }
     },
 
@@ -36,13 +38,21 @@ export default {
        
       
         onFileChange(e) {
-            console.log('targeted file: ', e.target.files[0].name);
+            console.log('targeted file: ', e.target.files);
             this.image = e.target.files[0];
-     
+
+            var reader = new FileReader();
+            reader.onload = (e) => {
+                this.preview = e.target.result    
+             
+            }
+           
+           reader.readAsDataURL(this.image);
+ 
         }, 
 
         onUploadFile(){
-                console.log('je fonctionne');
+              
                 const fd = new FormData();
                 //fd.append('image', this.image, this.image.name)
                 fd.append('userID', this.userID);
@@ -50,13 +60,16 @@ export default {
                 fd.append('imageUrl', this.image, this.image.name);
 
                 const headers= {
-                    "Authorization": "Bearer" + localStorage.getItem('mytoken'),
+                    "Authorization": "Bearer" + ' ' + localStorage.getItem('mytoken'),
                     'Content-Type' : 'multipart/form-data'
                 };
+                if(this.title_publication==null){
+                    this.errMsg = 'your post is not complete'
+                } else{   
 
-                   axios.post('/publication',
+                axios.post('/publication',
                    fd,
-                   {"header" : headers}         
+                   {"headers" : headers}         
                     ) 
                         .then(
                             res => {
@@ -65,29 +78,36 @@ export default {
                             }
                         )
                         .catch(
-                        console.log('ERROR')
-                        )
+                             error => console.log(error)
+                        )  
+                    
+                }
+
             
         }
-     
+           
     }
-
 }
 </script>
 
 <style lang="scss" scoped>
-
-
-.gif-container{
+.upload-gif {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    margin: 0 50px;
+
+    .gif-container{
+    background-color: rgb(0, 162, 255);
+    width: 80%;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+  
     position: relative;
 
     .file_preview{
-        height: 50px;
+     
         background-color: black;
+        object-fit: cover;
     }
     .file_select{
         height: 50px;
@@ -98,7 +118,15 @@ export default {
         bottom: 0;
     }
 
+    }
+    .msg_err{
+        color: red;
+    }
+
+
+
 }
+
 
 
 

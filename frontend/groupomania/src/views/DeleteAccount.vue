@@ -1,16 +1,6 @@
 <template>
 <div>
     <div class="container profil-user">
-
-    <h1>Edit profil</h1>
-        <div class="profil-info">
-            <label for="username">Username</label>
-            <input type="text" id="username" v-model="username">
-            <label for="email">Email</label>
-            <input type="text" id="email" v-model="email"> 
-            <button >apply changes</button>  
-        </div>
-
         <button @click="deleteAccount" class="delete" >Delete account</button>    
     </div>
 </div>
@@ -32,21 +22,21 @@ export default {
         deleteAccount() {
             axios.delete('/users/' + localStorage.getItem('userID'))
             .then(
-                response => console.log(response)
+                response => {
+                    console.log(response);
+                    this.$router.push('deleteconfirmation')
+
+                }
 
             )
             .catch(
                error => console.log(error)
             )
 
-
-
-
-            localStorage.removeItem("mytoken");
-            localStorage.removeItem("userID");
-            localStorage.removeItem("email");
-            localStorage.removeItem("username");
+           
             this.$router.push('/');  
+            localStorage.clear();
+            location.reload()
         },
     /*
         updateAccount() {
@@ -71,26 +61,6 @@ export default {
     width: 100%;
     color: white;
 
-    .profil-info{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-
-            input{
-                width: auto;
-                overflow: auto;
-                outline: none;
-                margin-bottom: 5px;
-            }
-    }
-
-    .delete{
-       
-    }
-
-      
-   
 }
             
 

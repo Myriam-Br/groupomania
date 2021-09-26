@@ -6,7 +6,8 @@
                 <span class="posted_at"> {{publication.created_at}}</span> 
             </div>
             <h2>{{publication.title}}</h2>
-            <img :src="publication.imageUrl" class="gif_img" alt="image">
+            <img  class="gif_img" alt="image">
+            <span class="image_url">{{publication.imageUrl}}</span>
             <div class="interaction">
                 <div class="likes">
                     <div class="like">
@@ -18,7 +19,7 @@
                         <span class="dislike-counter">{{this.dislike_count}}</span> 
                     </div>
                 </div> 
-                <button @click="showComments" class="show">comment</button>
+                <button @click="showComments" class="show" >...</button>
             </div>
             <span class="err_msg">{{this.msg_err_like}}</span>
          </div>
@@ -43,7 +44,8 @@ export default {
             userID: localStorage.getItem('userID'),
 
             //likes section 
-            like: true,
+            like: null,
+            dislike: null,
             title: null,
             imageUrl: null,
             message:null, 
@@ -53,8 +55,6 @@ export default {
             //publicationArray : JSON.parse(localStorage.getItem('publicationArray')),
 
             //comments section
-            comment_list : null,
-            comment_field: null,
             username: null,
 
             //message error
@@ -66,23 +66,31 @@ export default {
     methods: {
         
        
-        test(){
-            console.log();
-        }, 
         sendLike() {
             if(this.userID) {
                 this.like = 1,
                 this.dislike = 0
                 console.log('send like');
+                const headers= {
+                    "Authorization": "Bearer" + ' ' + localStorage.getItem('mytoken'),
+                    'Content-Type' : 'multipart/form-data'
+                };console.log(headers);
                 axios
-                .post('likes',{
+                .post('/likes',{
                     userID: this.userID,
                     publicationID: this.publication.id,
-                    like: this.like,
-                    dislike: this.dislike,
-                })
+                    like_user: this.like,
+                    dislike_user: this.dislike,
+                }, { "headers" : headers })
                 .then(
-                    response => console.log(response)
+                    response => {
+                        console.log(response);
+                        if(response.data.status==false){
+                            console.log('sometging wrong');
+                        }else {
+                            //location.reload()
+                        }           
+                    }
                 )
                 .catch(
                     error => console.log(error)
@@ -99,13 +107,26 @@ export default {
                 this.like = 0,
                 this.dislike = 1
                 console.log('send dislike');
+                const headers= {
+                    "Authorization": "Bearer" + ' ' + localStorage.getItem('mytoken'),
+                    'Content-Type' : 'multipart/form-data'
+                };console.log(headers);
                 axios
                 .post('likes', {
                     userID: this.userID,//from local storage -> account logged in
                     publicationID: this.publication.id,//from the forum page with get ('/publication')
-                    like: this.like,
-                    dislike: this.dislike,
-                })           
+                    like_user: this.like,
+                    dislike_user: this.dislike,
+                }, { "headers" : headers }) 
+                .then(
+                    response => {
+                        console.log(response);
+                        //location.reload()
+                    }
+                )
+                .catch(
+                    error => console.log(error)
+                )          
             }else {
                 this.msg_err_like = 'Please login to your account'
             }
@@ -119,14 +140,12 @@ export default {
                 localStorage.setItem('publicationById', this.publication.id) ;
                 localStorage.setItem('publicationByIdCreateAt', this.publication.created_at);//display post date
                 localStorage.setItem('publicationByUserId', this.publication.userID);  //storage to display the username get('/users/:id) :id = localStorage.getItem('publicationByUserId') 
+                localStorage.setItem('publicationByIdImage', this.publication.imageUrl);  
         }
     },
 
      mounted() {
-         /*
-            const headers = { 
-            "Authorization": "Bearer " + localStorage.getItem('mytoken'),
-            }; */
+      
    
                //get total likes
             axios.get('/likes/total_likes/' + this.publication.id)
@@ -135,8 +154,8 @@ export default {
                         this.like_count = response.data.data[0].total_likes
                     }
                 )
-                .catch (       
-                    console.log('ERROR')
+                .catch (      
+                    error => console.log(error)
                 )
           
             axios.get('/likes/total_dislikes/' + this.publication.id)
@@ -148,7 +167,7 @@ export default {
                     }
                 ) 
                 .catch(
-                    console.log('ERROR')
+                    error => console.log(error)
                 )
 
             axios.get('/users/' + this.user_publication)
@@ -165,7 +184,6 @@ export default {
                     axios.get('/users/' + this.userID)
                             .then(
                                 response => {
-                                    console.log('RESULT', parseInt(response.data.data[0].isAdmin));
                                     localStorage.setItem('isAdmin', response.data.data[0].isAdmin)
                                 }
 
@@ -188,9 +206,9 @@ export default {
 
 .post{
     background-color: rgb(156, 180, 223);
-    width: 100%;
+    width: 80%;
     height: auto;
-    padding: 5px 20px;
+    padding: 5px 20;
     border-radius: 0px;
     align-self: center;
     color: black;
@@ -199,29 +217,21 @@ export default {
        text-align: center;
    }
 
-    .comment-section{
-        width: 92%;
-        height: 50px;
-        background-color: rgb(255, 255, 255);
-        border: 1px black solid;
-    }
-
     .gif_img{
         width: 100%;
         height: 200px;
         background-color: aqua;
     }
-    .comment-field-container{
-        display: flex;
-        .comment_field{
-            height: 30px;
-            width: 99%;     
-        }
-
-    }
+   
     .interaction{
         display: flex;
         justify-content: center;
+        .show{
+            font-size: 25px;
+            padding: 0;
+            font-weight: 500;
+            
+        }
         .likes{
             display: flex;
             margin-right: 10px;

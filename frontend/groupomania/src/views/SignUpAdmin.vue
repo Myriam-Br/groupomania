@@ -21,10 +21,6 @@
         Already have an account?
         <router-link class="link link-to-signin" :to="{ name : 'signin'}">Sign in</router-link>
       </p>
-      <p class="signin-msg">
-        Register as an admin
-        <router-link class="link link-to-signin" :to="{ name : 'signupadmmin'}">Sign Up</router-link>
-      </p>
       <span class="msg_err">{{this.err_msg}}</span>
   </div>
 </template>
@@ -32,9 +28,9 @@
 <script>
 import axios from "axios";
 export default {
-    name: "signup",
+    name:'signupadmmin',
 
-    data(){
+     data(){
       return{
           username: '',
           email: '',
@@ -46,7 +42,7 @@ export default {
           async register() { 
             
             //send request
-            const response =  await axios.post('users/register', {
+            const response =  await axios.post('users/register/admin', {
               username: this.username,
               email: this.email,
               password : this.password,
@@ -63,8 +59,8 @@ export default {
      
           } 
     }
-}
 
+}
 </script>
 
 <style lang="scss" scoped>
@@ -121,4 +117,5 @@ export default {
     }
 
 }
+
 </style>

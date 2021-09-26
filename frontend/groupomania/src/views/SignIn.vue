@@ -3,7 +3,7 @@
       <h1>SIGN IN</h1>
       <form @submit.prevent="login" class="form-signin">
         <label for="email">Email</label>
-        <input type="text" class="email" v-model="email">
+        <input type="email" class="email" v-model="email">
         <label for="password">Password</label>
         <input type="password" class="password" v-model="password">  
         <button  @click="login" class="btn-signin">Sign In</button>
@@ -36,14 +36,17 @@ export default {
                email: this.email,
                password: this.password
            });
-           //console.log(response);
-           if(response.data.status==true) {
+
+           if(this.email=='' || this.password==''){
+               this.errormsg = 'Please fill all the fields'
+           }else if(response.data.status==true) {
                 this.$router.push('/');  
-                this.errormsg =''        
+                this.errormsg ='' ;
+                location.reload()
+                   
            } else{
                console.log('ERROR');
                this.errormsg = 'email or password incorrect'
-
            }
         //console.log(response.data.status);
             //console.log(response.data);

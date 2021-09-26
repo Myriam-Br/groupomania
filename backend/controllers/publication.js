@@ -48,7 +48,7 @@ exports.createPublication = (req, res) => {
         title : req.body.title,
         imageUrl : req.files.imageUrl.name,
     }); 
-    console.log(req.files.imageUrl.name);
+    console.log(req.files);
     console.log(publication);
     dbConnect.query('INSERT INTO publication SET ?', publication, (error, result) => {
         if(error) {

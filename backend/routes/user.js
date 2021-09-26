@@ -14,6 +14,9 @@ router.get('/:id', userCtrl.usersById)
 //create new account
 router.post('/register', userCtrl.register);
 
+//create new account admin
+router.post('/register/admin', userCtrl.registerAdmin);
+
 //login to account
 router.post('/login', userCtrl.login);
 

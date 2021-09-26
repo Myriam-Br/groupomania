@@ -75,60 +75,31 @@ exports.getDislikesTotal = (req, res) => {
 
 
 exports.likePublication =  (req, res) => {
-    console.log(likes);
-    var likes = new Likes(req.body)
-    //console.log(req.body);
-   console.log(likes.dislike_user);
-   console.log(likes.userID);
-    console.log(!likes.userID);
-    if(likes.like_user==1 && likes.dislike_user==0){
-        console.log('post liked');
-        dbConnect.query('INSERT INTO likes SET ?', likes, (error, result) => {
+   
+    const like = new Likes({
+        userID : req.body.userID,
+        publicationID : req.body.publicationID,
+        like_user : req.body.like_user,
+        dislike_user : req.body.dislike_user,
+    })
+   console.log(like);
+        dbConnect.query('INSERT INTO likes SET ?', like, (error, result) => {
+            console.log(like);
             if(error) {
-                res.json({
-                    status: false, 
-                    message: 'there are some error with query'})
+               res.json({
+                   status:false,
+
+               })
             }else {
                 res.json({
                     status: true,
                     data: result,
-                    message : 'like saved  successfully'})
+                    message : 'like saved  successfully'
+                })
+                console.log(result);
             }  
         })
 
-    }else if(likes.dislike_user==1 && likes.like_user==0){
-        console.log('post disliked');
-        dbConnect.query('INSERT INTO likes SET ?', likes, (error, result) => {
-            if(error) {
-                res.json({
-                    status: false, 
-                    message: 'there are some error with query'})
-            }else {
-                res.json({
-                    status: true,
-                    data: result,
-                    message : 'dislike saved  successfully'})
-            }  
-        })
-    }else if(likes.like_user==1 && likes.dislike_user==1) {
-        dbConnect.query('DELETE FROM likes WHERE publicationID=?', publicationID, (error, result) => {
-            if(error)
-                res.send(err)
-                res.json({
-                    status:true,
-                    message:"like|dislike deleted successfully"
-                })
-         })
-    console.log("can't like and dislike the same publication");
-    res.json({
-        message:"can't like & dislike the same publication"
-    })
-    }else {
-        console.log('something went wrong');
-        res.json({
-            message:"something went wrong"
-        })
-    }
 }
 
 

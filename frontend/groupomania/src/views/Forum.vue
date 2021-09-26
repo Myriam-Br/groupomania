@@ -1,7 +1,9 @@
 <template>
   <div class="container">
-      <h1>FORUM PAGE</h1>
-      <button   @click="createPublication" class="show_create" >Create post</button>
+      <h1 class="msg_bienvenue">Bienvenue {{this.username_logged_in}} !</h1>
+      <h2 class="msg_intro">Découvrez les toutes dernières publications de vos collègues!</h2>
+
+      <button   @click="createPublication" class="show_create" >+</button>
       <span class="errMsg">{{this.errMsg}}</span>
        <div class="forum"> 
          <div class="publications">
@@ -34,7 +36,8 @@ export default {
         //publicationArray: localStorage.getItem('publicationArray'),
         errMsg: null,
         usernamePublication: null,
-        userIdPublication: null
+        userIdPublication: null,
+        username_logged_in: null,
       }
     },
 
@@ -46,9 +49,28 @@ export default {
       .then(
         response => {
           this.publications = response.data.data,
-          console.log('publication by ID',this.publications);   
+          console.log('publication by ID',this.publications);
+            
         }    
       )
+      .catch(
+        error => console.log(error)
+      )
+
+
+      axios
+      .get('/users/' + this.userID)
+      .then(
+        response => {
+          console.log(response.data.data[0].username);
+          this.username_logged_in =  response.data.data[0].username;
+
+        }
+      )
+      .catch(
+        error => console.log(error)
+      )
+      
     
     },
 
@@ -82,9 +104,19 @@ export default {
     display: flex;
     flex-direction: column;
     padding-bottom: 20px;
+
+    h2{
+      text-align: center;
+      margin-bottom: 30px;
+    }
     .show_create{
-      width: 50px;
+      width: 40px;
+      padding: 0;
       align-self: center;
+      margin-bottom: 20px;
+      font-size: 35px;
+      border-radius: 100px;
+      background-color: rgb(224, 244, 246);
     }
     .errMsg{
           align-self: center;
@@ -93,9 +125,7 @@ export default {
     .forum{
         display: flex;
         flex-direction: column;   
-        padding: 0px 15%;
-
-       
+     
     }
   }
 
