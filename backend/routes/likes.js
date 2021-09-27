@@ -12,6 +12,6 @@ router.get('/total_likes/:publicationID', likesCtrl.getLikesTotal);
 
 router.post('/', auth,  likesCtrl.likePublication)
 
-router.delete('/:publicationID',   likesCtrl.deleteLikeDislike);
+router.delete('/:publicationID', auth,  likesCtrl.deleteLikeDislike);
 
 module.exports = router;

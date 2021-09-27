@@ -2,7 +2,6 @@
   <div class="comment-container">  
             <p class="username">{{this.username_of_publication}}</p>
             <p class="comment">{{comment_field.comment_user}}</p>
-            <span>{{comment_field.userID}}</span>
             <button v-if="show_btn_delete_com" @click="deleteComment" class="delete_comment" >X</button>
   </div>
 </template>

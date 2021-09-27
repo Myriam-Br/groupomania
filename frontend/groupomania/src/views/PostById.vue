@@ -110,7 +110,10 @@ export default {
             }
           )
           .catch(
-            error => console.log(error)
+            error => {
+              console.log( error);
+              this.msg_err = 'Please login to your account';
+            }
           )
         
       },

@@ -99,7 +99,7 @@ export default {
     
     .gif-container{
     background-color: rgb(15, 54, 77);
-    width: 50%;
+    width: 80%;
     align-self: center;
     display: flex;
     flex-direction: column;
@@ -108,7 +108,7 @@ export default {
 
     .file_preview{
         object-fit: scale-down;
-        width: 70%;
+        width: 100%;
         background-color: black;
         object-fit: cover;
         align-self: center;
