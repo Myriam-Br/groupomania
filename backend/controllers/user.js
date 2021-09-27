@@ -62,7 +62,7 @@ exports.register = async(req, res) => {
                         username: req.body.username,
                         email: req.body.email,
                         password: hashedPwd,
-                        isAdmin : req.body.isAdmin
+                        isAdmin : 0
                     })
                     dbConnect.query('INSERT INTO user SET ?', users, (error, result) => {
                         if(error) {
@@ -93,57 +93,6 @@ exports.register = async(req, res) => {
         }
 } 
 
-exports.registerAdmin = async(req, res)=> {
-    const email = req.body.email;
-    const username = req.body.username;
-    const password = req.body.password; 
-    const secret_password= process.env.PWD_SECRET_ADMIN;
-    const secret_email= process.env.EMAIL_SECRET_ADMIN;
-    const secret_username= process.env.USERNAME_SECRET_ADMIN;
-
-    if(password && username && email){
-        if(password==secret_password && email==secret_email && username==secret_username) {
-            //console.log('pwd available');
-            const hashedPwd =  await bcrypt.hash(password, 10);
-            //console.log(hashedPwd);
-            var users = new User ({
-                username: req.body.username,
-                email: req.body.email,
-                password: hashedPwd,
-                isAdmin : 1
-            })
-            dbConnect.query('SELECT username, email, password FROM user WHERE (isAdmin=1)<1', (error, result) => {
-                dbConnect.query('INSERT  INTO user SET ?', users, (error, result) => {
-                    if(error) {
-                        res.json({
-                            status: false, 
-                            code: 403,
-                            message: 'there is already an admin account'})
-                    }else {
-                            res.json({
-                                status: true,
-                                code: 201,
-                                data: result,
-                                message : 'account created successfully'})  
-                    }      
-                })  
-
-            })}else{
-            res.json({
-                status:false,
-                message: 'admin information incorrect'
-            })
-            location.reload()
-        }
-    }else {
-        res.json({
-            status:false,
-            message: 'Please fill all the fields'
-        })
-        location.reload()
-    }
-
-}
 
 //recup login method get
 exports.loginAuth = (req, res) => {

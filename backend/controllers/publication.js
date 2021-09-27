@@ -62,7 +62,6 @@ exports.createPublication = (req, res) => {
                 message : 'publication created successfully'})
         }     
     })
-
 }
 
 

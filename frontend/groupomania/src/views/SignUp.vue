@@ -21,10 +21,6 @@
         Already have an account?
         <router-link class="link link-to-signin" :to="{ name : 'signin'}">Sign in</router-link>
       </p>
-      <p class="signin-msg">
-        Register as an admin
-        <router-link class="link link-to-signin" :to="{ name : 'signupadmmin'}">Sign Up</router-link>
-      </p>
       <span class="msg_err">{{this.err_msg}}</span>
   </div>
 </template>
@@ -58,7 +54,7 @@ export default {
                this.$router.push('/signin');       
             }else{
                console.log('ERROR');
-               this.err_msg = 'invalid informations'
+               this.err_msg = 'Password must contain 6 or more characters a digita lower-case letter an upper-case letter'
            }
      
           } 

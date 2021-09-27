@@ -77,6 +77,8 @@ export default {
 
         //err mg
         msg_err:null,
+        like:null,
+        dislike:null,
 
    
             
@@ -126,7 +128,7 @@ export default {
           };console.log(headers);
           
           axios
-          .post('likes',{
+          .post('/likes',{
               userID: this.userID,
               publicationID: this.publication_by_id,
               like_user: this.like,
@@ -162,7 +164,7 @@ export default {
             'Content-Type' : 'multipart/form-data'
           };console.log(headers);
           axios
-          .post('likes', {
+          .post('/likes', {
               userID: this.userID,
               publicationID: this.publication_by_id,
               like_user: this.like,

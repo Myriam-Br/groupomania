@@ -6,7 +6,7 @@ import PostById from '../views/PostById';
 import Account from '../views/Account';
 import DeleteAccount from '../views/DeleteAccount';
 import SignUp from '../views/SignUp';
-import SignUpAdmin from '../views/SignUpAdmin';
+
 import SignIn from '../views/SignIn';
 import ConfirmDelete from '../views/DeleteAccountConfirm';
 
@@ -52,11 +52,7 @@ const routes = [
     name: "signup",
     component: SignUp
   },
-  {
-    path: "/signupa_dmmin",
-    name: "signupadmmin",
-    component: SignUpAdmin,
-  },
+
   {
     path: "/signin",
     name: "signin",

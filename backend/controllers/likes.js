@@ -83,22 +83,46 @@ exports.likePublication =  (req, res) => {
         dislike_user : req.body.dislike_user,
     })
    console.log(like);
-        dbConnect.query('INSERT INTO likes SET ?', like, (error, result) => {
-            console.log(like);
-            if(error) {
-               res.json({
-                   status:false,
+   if(like.like_user==1 && like.dislike_user==0){
+       console.log('poste liked');
+       dbConnect.query('INSERT INTO likes SET ?', like, (error, result) => {
+        console.log(like);
+        if(error) {
+           res.json({
+               status:false,
 
-               })
-            }else {
-                res.json({
-                    status: true,
-                    data: result,
-                    message : 'like saved  successfully'
-                })
-                console.log(result);
-            }  
-        })
+           })
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'like saved  successfully'
+            })
+            console.log(result);
+        }  
+    })
+   }else if(like.like_user==0 && like.dislike_user==1){
+       console.log('post disliked');
+       dbConnect.query('INSERT INTO likes SET ?', like, (error, result) => {
+        console.log(like);
+        if(error) {
+           res.json({
+               status:false,
+
+           })
+        }else {
+            res.json({
+                status: true,
+                data: result,
+                message : 'like saved  successfully'
+            })
+            console.log(result);
+        }  
+    })
+   }else{
+       console.log('something went wrong');
+   }
+       
 
 }
 
