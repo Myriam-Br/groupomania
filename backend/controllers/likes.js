@@ -55,11 +55,19 @@ exports.getLikesTotal = (req, res) => {
     })
 }
 
-exports.getDislikesTotal = (req, res) => {
-    //console.log('RECUP ID PUBLICATION:', req.params.publicationID);
-    var publicationID = req.params.publicationID;
 
-    dbConnect.query('SELECT IFNULL (SUM(dislike_user), 0) total_dislikes FROM likes WHERE publicationID=?', publicationID, (error, result) => {
+exports.likePublication =  (req, res) => {
+   
+    const like = new Likes({
+        userID : req.body.userID,
+        publicationID : req.body.publicationID,
+        like_user : 1,
+        dislike_user : 0,
+    })
+ 
+       dbConnect.query('INSERT INTO likes SET ?', like, (error, result) => {
+        console.log(like);
+        console.log('post liked');
         if(error) {
             res.json({
                 status: false, 
@@ -68,62 +76,12 @@ exports.getDislikesTotal = (req, res) => {
             res.json({
                 status: true,
                 data: result,
-                message : 'total likes fetched successfully'})
+                message : 'like saved successfully'})
+
+                //console.log(result);
         }    
-    })
-}
-
-
-exports.likePublication =  (req, res) => {
-   
-    const like = new Likes({
-        userID : req.body.userID,
-        publicationID : req.body.publicationID,
-        like_user : req.body.like_user,
-        dislike_user : req.body.dislike_user,
-    })
-   console.log(like);
-   if(like.like_user==1 && like.dislike_user==0){
-       console.log('poste liked');
-       dbConnect.query('INSERT INTO likes SET ?', like, (error, result) => {
-        console.log(like);
-        if(error) {
-           res.json({
-               status:false,
-
-           })
-        }else {
-            res.json({
-                status: true,
-                data: result,
-                message : 'like saved  successfully'
-            })
-            console.log(result);
-        }  
-    })
-   }else if(like.like_user==0 && like.dislike_user==1){
-       console.log('post disliked');
-       dbConnect.query('INSERT INTO likes SET ?', like, (error, result) => {
-        console.log(like);
-        if(error) {
-           res.json({
-               status:false,
-
-           })
-        }else {
-            res.json({
-                status: true,
-                data: result,
-                message : 'like saved  successfully'
-            })
-            console.log(result);
-        }  
-    })
-   }else{
-       console.log('something went wrong');
-   }
-       
-
+        
+    }) 
 }
 
 

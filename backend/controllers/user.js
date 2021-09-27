@@ -48,12 +48,11 @@ exports.register = async(req, res) => {
         const email = req.body.email;
         const username = req.body.username;
         const password = req.body.password;  
-        //console.log('pwd field',password);
         const pwdRe =  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
-        //const emailRe = /\b[A-Z0-9._%a-z\-]+@(?:[A-Z0-9a-z\-]+\.)+[A-Za-z]{2,4}\z/;
-   
+    
 
         if(password && username && email){
+            
                 if(password.match(pwdRe)) {
                     //console.log('pwd available');
                     const hashedPwd =  await bcrypt.hash(password, 10);
@@ -62,7 +61,7 @@ exports.register = async(req, res) => {
                         username: req.body.username,
                         email: req.body.email,
                         password: hashedPwd,
-                        isAdmin : 0
+                        isAdmin : req.body.isAdmin
                     })
                     dbConnect.query('INSERT INTO user SET ?', users, (error, result) => {
                         if(error) {
@@ -84,7 +83,6 @@ exports.register = async(req, res) => {
                         message: 'Password must contain 6 or more characters a digita lower-case letter an upper-case letter'
                     })
                 }
-   
         }else {
             res.json({
                 status:false,

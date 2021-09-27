@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 25 sep. 2021 à 16:56
+-- Généré le : lun. 27 sep. 2021 à 18:39
 -- Version du serveur : 10.4.21-MariaDB
 -- Version de PHP : 8.0.10
 
@@ -40,20 +40,16 @@ CREATE TABLE `comments` (
 --
 
 INSERT INTO `comments` (`id`, `userID`, `publicationID`, `comment_user`, `created_at`) VALUES
-(82, 101, 90, 'dsd', '2021-09-25 14:54:05'),
-(83, 101, 90, 'dsdsqd', '2021-09-25 14:54:07'),
-(84, 101, 90, 'gf', '2021-09-25 14:55:00');
-
--- --------------------------------------------------------
-
---
--- Structure de la table `image_publication`
---
-
-CREATE TABLE `image_publication` (
-  `userID` int(11) NOT NULL,
-  `imageUrl` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(167, 107, 159, 'd<d', '2021-09-27 15:54:17'),
+(168, 107, 159, 'ds', '2021-09-27 15:54:20'),
+(169, 107, 159, 'fsf', '2021-09-27 16:01:40'),
+(170, 107, 159, 'gsd', '2021-09-27 16:01:43'),
+(172, 225, 159, 'sqdqs', '2021-09-27 16:26:57'),
+(173, 225, 159, 'qsdsq', '2021-09-27 16:27:00'),
+(174, 225, 160, 'dsgs', '2021-09-27 16:29:38'),
+(175, 225, 160, 'sdgs', '2021-09-27 16:29:39'),
+(176, 225, 159, 'tsdfs', '2021-09-27 16:30:56'),
+(177, 225, 159, 'sd', '2021-09-27 16:33:38');
 
 -- --------------------------------------------------------
 
@@ -64,9 +60,15 @@ CREATE TABLE `image_publication` (
 CREATE TABLE `likes` (
   `userID` int(11) NOT NULL,
   `publicationID` int(11) NOT NULL,
-  `like_user` tinyint(4) NOT NULL DEFAULT 0,
-  `dislike_user` tinyint(4) NOT NULL DEFAULT 0
+  `like_user` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `likes`
+--
+
+INSERT INTO `likes` (`userID`, `publicationID`, `like_user`) VALUES
+(107, 159, 1);
 
 -- --------------------------------------------------------
 
@@ -87,8 +89,8 @@ CREATE TABLE `publication` (
 --
 
 INSERT INTO `publication` (`id`, `userID`, `title`, `imageUrl`, `created_at`) VALUES
-(89, 101, 'my publication', 'some file', '2021-09-25 14:53:48'),
-(90, 101, 'my publication 2', 'some file', '2021-09-25 14:54:00');
+(159, 107, 'fsq', 'http://localhost:8080/images/gifsimpson.gif1632757345773.gif', '2021-09-27 15:42:25'),
+(160, 225, 'sfqfd', 'http://localhost:8080/images/gifsimpson.gif1632760174883.gif', '2021-09-27 16:29:34');
 
 -- --------------------------------------------------------
 
@@ -109,9 +111,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `email`, `password`, `isAdmin`) VALUES
-(101, 'test1', 'test@test.com', '$2b$10$YYSkaH62.eIhZCFcdg.xMuM7YCfpcg6lBX8jqumof6a1ZRC3MERTy', 0),
-(104, 'admin', 'admin@test.com', '$2b$10$J0vhaAyNqeb04Pz2alF6PuY8vrGZwjSnUvJSLNXami/uQDkMDgqP.', 1),
-(105, 'newtest', 'newtest@test.com', '$2b$10$xSlFQJnzDfDLqpUsJaqxmeqJgSlN4cgCJALjZ6zsGT12iySKQSBCC', NULL);
+(107, 'test', 'test@test.com', '$2b$10$6lHDzxtYHeWu4q5g9w/rEuE4SEo5MGxFXZ0zd0rSMj0kRJdn8vuRW', NULL),
+(225, 'admin', 'admin@test.com', '$2b$10$M8nnhd.5kePAgjcuYuJ/o.oAvSiXPn6VJzM9WcxHfTissxv0rsdkW', 1);
 
 --
 -- Index pour les tables déchargées
@@ -124,12 +125,6 @@ ALTER TABLE `comments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_userID_rating` (`userID`),
   ADD KEY `fk_publication_rating` (`publicationID`);
-
---
--- Index pour la table `image_publication`
---
-ALTER TABLE `image_publication`
-  ADD KEY `fk_user_image_publication` (`userID`);
 
 --
 -- Index pour la table `likes`
@@ -161,19 +156,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=178;
 
 --
 -- AUTO_INCREMENT pour la table `publication`
 --
 ALTER TABLE `publication`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=227;
 
 --
 -- Contraintes pour les tables déchargées
@@ -185,12 +180,6 @@ ALTER TABLE `user`
 ALTER TABLE `comments`
   ADD CONSTRAINT `fk_publication_rating` FOREIGN KEY (`publicationID`) REFERENCES `publication` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_userID_rating` FOREIGN KEY (`userID`) REFERENCES `user` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `image_publication`
---
-ALTER TABLE `image_publication`
-  ADD CONSTRAINT `fk_user_image_publication` FOREIGN KEY (`userID`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `likes`

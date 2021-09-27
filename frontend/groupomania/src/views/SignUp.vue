@@ -111,9 +111,8 @@ export default {
     }
 
     .msg_err{
-      color: red;
-      text-align: center ;
-      margin-top: 10px;
+      text-align: center;
+      margin-bottom: 10px;
     }
 
 }

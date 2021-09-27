@@ -10,9 +10,6 @@ router.get('/:publicationID', likesCtrl.getLikeByPublicationID);
 
 router.get('/total_likes/:publicationID', likesCtrl.getLikesTotal);
 
-router.get('/total_dislikes/:publicationID', likesCtrl.getDislikesTotal);
-
-
 router.post('/', auth,  likesCtrl.likePublication)
 
 router.delete('/:publicationID',   likesCtrl.deleteLikeDislike);

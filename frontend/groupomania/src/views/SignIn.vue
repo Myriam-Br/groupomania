@@ -53,9 +53,15 @@ export default {
             var token = response.data.token;
             localStorage.setItem('mytoken',token);
             var userID = response.data.userID;
-            localStorage.setItem('userID',userID);
+            if(userID==undefined){
+                console.log('not valid');
+            }else{
+                localStorage.setItem('userID',userID);
+            }
             var username = response.data.username;
             localStorage.setItem('username',username);
+            
+            
             var email = response.data.data.user.email;
             //console.log(email);
             localStorage.setItem('email',email);     
@@ -100,21 +106,18 @@ export default {
         cursor: pointer;
 
     }
+    .error{
+        color: red;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
     .signup-msg {
         text-align: center;
         margin-bottom: 20px;
         .link-to-signup{
         color: rgb(117, 4, 42);
         font-weight: 500;  
-        }
-
-    }
-    .forgotpw-msg {
-        text-align: center;
-        .link-to-resetpw{
-        color: rgb(117, 4, 42);
-        font-weight: 500;  
-          
         }
 
     }

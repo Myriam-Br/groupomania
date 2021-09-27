@@ -9,8 +9,6 @@ router.get('/', userCtrl.usersList)
 //get all users
 router.get('/:id', userCtrl.usersById)
 
-
-
 //create new account
 router.post('/register', userCtrl.register);
 

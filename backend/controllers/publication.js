@@ -1,6 +1,7 @@
 const dbConnect = require('../database');
 const Publication = require('../models/Publication');
 
+
 //const multer = require('../middlewares/multer_config')
 
 //imageUrl:`${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
@@ -39,51 +40,56 @@ exports.publicationsById = (req, res) => {
 }
 
 
+
 //create publication
-exports.createPublication = (req, res) => {
-
-
+exports.createPublication = (req, res, next) => {
+   /// console.log("TEST", req.file, req.body)
+  
     const publication = new Publication({
-        userID : req.body.userID,
-        title : req.body.title,
-        imageUrl : req.files.imageUrl.name,
-    }); 
-    console.log(req.files);
-    console.log(publication);
-    dbConnect.query('INSERT INTO publication SET ?', publication, (error, result) => {
-        if(error) {
-            res.json({
-                status: false, 
-                message: 'there are some error with query'})
-        }else {
-            res.json({
-                status: true,
-                data: result,
-                message : 'publication created successfully'})
-        }     
+      userID: req.body.userID,
+      title: req.body.title,
+      imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+    }); console.log("TEST AFTER", req.file, req.body)
+    dbConnect.query("INSERT INTO publication SET ?", publication, (error, result) => {
+      if (error) {
+        res.json({
+          status: false,
+          message: "there are some error with query",
+        })
+      } else {
+        res.json({
+          status: true,
+          data: result,
+          message: "publication created successfully",
+        })
+      }
     })
 }
 
 
 //delete publication
 exports.deletePublication = (req, res) => {
-    const userID = parseInt(req.body.userID);
 
-    dbConnect.query('SELECT * FROM publication WHERE id=? and userID=?', [req.params.id,userID], async(error, result) => {
-         // si on trouve un resultat alors user connecté = autor donc on suppr la publication
-        // sinon on teste si user connecté = admin :
-        dbConnect.query('SELECT * FROM user WHERE id=? and isAdmin=1', [userID], async(error, result) => {
-            dbConnect.query('DELETE FROM publication WHERE id=?', req.params.id, (error, result) => {
-                if(error){  
-                    res.send(error)
-                }else{
-                    res.json({
-                        status:true,
-                        message:"Publication deleted succesfully",
-                        data: result
-                    })
-                }        
-            })
-        })
-    })
+        const userID = parseInt(req.body.userID);
+        dbConnect.query('SELECT * FROM publication WHERE id=? and userID=?', [req.params.id,userID], async(error, result) => {
+            // si on trouve un resultat alors user connecté = autor donc on suppr la publication
+            //console.log('FILENAME',req.body.imageUrl);
+           // sinon on teste si user connecté = admin :
+           dbConnect.query('SELECT * FROM user WHERE id=? and isAdmin=1', [userID], async(error, result) => {
+                dbConnect.query('DELETE FROM publication WHERE id=?', req.params.id, (error, result) => {
+                        if(error){  
+                            res.send(error)
+                        }else{
+                            
+                            res.json({
+                                status:true,
+                                message:"Publication deleted succesfully",
+                                data: result
+                            })
+                        }        
+                });
+            
+           })
+       })   
+    
 }

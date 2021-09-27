@@ -2,7 +2,8 @@
   <div class="comment-container">  
             <p class="username">{{this.username_of_publication}}</p>
             <p class="comment">{{comment_field.comment_user}}</p>
-            <button v-if="this.show_btn_delete_com" @click="deleteComment" class="delete_comment" >X</button>
+            <span>{{comment_field.userID}}</span>
+            <button v-if="show_btn_delete_com" @click="deleteComment" class="delete_comment" >X</button>
   </div>
 </template>
 
@@ -20,7 +21,7 @@ export default {
             publicationID: this.comment_field.publicationID,
             username_of_publication: null, //get with user_comment_id
             comment_id: this.comment_field.id,
-            show_btn_delete_com: this.user_id==this.userID || localStorage.getItem('isAdmin')==1,
+            show_btn_delete_com: localStorage.getItem('userID')==this.comment_field.userID|| localStorage.getItem('isAdmin')==1, 
         };    
     },
 
@@ -48,7 +49,6 @@ export default {
        deleteComment() {
             const headers= {
                 "Authorization": "Bearer" + ' ' + localStorage.getItem('mytoken'),
-                'Content-Type' : 'multipart/form-data'
             };
            axios
            .delete('/comments/' + this.comment_id, {"headers" : headers})

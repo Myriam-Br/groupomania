@@ -2,21 +2,27 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import "./axios"
+import Dayjs from 'vue-dayjs'
 
-/* import the fontawesome core */
-import { library } from '@fortawesome/fontawesome-svg-core'
 
-/* import specific icons */
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+Vue.use(Dayjs, {
+  //language set default
+  lang: 'en',
 
-/* import font awesome icon component */
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-/* add icons to the library */
-library.add(faUserSecret)
-
-/* add font awesome icon component */
-Vue.component('font-awesome-icon', FontAwesomeIcon)
+  /**
+   * addon filters { key: filter name }
+   */
+  filters: {
+    ago: 'ago',
+  },
+  /**
+   * addon directives { key: directives name}
+   * set {} to disable.
+   */
+  directives: {
+    countdown: 'countdown',
+  }
+});
 
 
 Vue.config.productionTip = false

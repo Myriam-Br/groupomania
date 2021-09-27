@@ -2,27 +2,22 @@
 <div class="container">
   <div class="post_container">
     <div class="info_post">
-       <span>{{this.username_publication}}</span>
-       <span class="posted_at">Posted: {{this.publication_created_at}}</span>
+        <h2>{{this.publication_title}}</h2>     
+       <span class="info-user">Posté par: {{this.username_publication}}</span>
     </div>
     
     <div class="post">
         <h2></h2>
         <span></span>
-        <img  class="gif_img" alt="image">
-        <span class="img_url">{{this.publication_image_url}}</span>
+        <img  class="gif_img" alt="image" :src="this.publication_image_url">
+        <span class="posted_at">Posted: {{this.create_at_format}}</span>
         <button v-if="this.show_btn_delete_publication" @click="deletePublication" class="btn_delete">X</button>
-
-        
+     
         <div class="interaction">
                 <div class="likes">
                     <div class="like">
                         <button @click="sendLike" class="like-btn"></button>
                         <span class="like-counter" >{{this.like_count}}</span>
-                    </div>
-                    <div class="dislike">
-                        <button  @click="sendDislike" class="dislike-btn"></button>
-                        <span class="dislike-counter">{{this.dislike_count}}</span> 
                     </div>
                 </div> 
         </div>
@@ -48,6 +43,7 @@
 <script>
 import Comments from "../components/Comments.vue"
 import axios from "axios"
+import dayjs from 'dayjs'
 export default {
     name: 'postId',
     components: {
@@ -62,6 +58,7 @@ export default {
         publication_user_id: null,
         publication_image_url: localStorage.getItem('publicationByIdImage'),
         user_id_publication: localStorage.getItem('publicationByUserId'),
+        publication_title: localStorage.getItem('publicationByIdTitle'),
 
         //
         username_publication: null,
@@ -75,13 +72,15 @@ export default {
         dislike_count:null,
         status: true,
 
+        user_like_publication:null,
+        publication_like_id:null,
+        like_array: null,
         //err mg
         msg_err:null,
-        like:null,
-        dislike:null,
 
-   
-            
+        //date
+        create_at_format: dayjs(this.publication_created_at).format('YYYY-MM-DD')
+  
       }
     
     },
@@ -120,11 +119,9 @@ export default {
 
         if(this.userID){
           this.like = 1,
-          this.dislike = 0
           console.log('send like');
           const headers= {
             "Authorization": "Bearer" + ' ' + localStorage.getItem('mytoken'),
-            'Content-Type' : 'multipart/form-data'
           };console.log(headers);
           
           axios
@@ -132,59 +129,22 @@ export default {
               userID: this.userID,
               publicationID: this.publication_by_id,
               like_user: this.like,
-              dislike_user: this.dislike,
           }, {"headers" : headers})
           .then(
               response => {
-                console.log('RESPONSE', response.data.status);
+                console.log('RESPONSE', response);
                 location.reload()
-              }
-              
+              }              
           )
           .catch(
               error => console.log(error)
           )
-
-          
 
         }else{
             this.msg_err = 'Please login to your account'
         }
     
           
-      },
-
-      sendDislike() { 
-        if(this.userID){
-          this.like = 0,
-          this.dislike = 1
-          console.log('send dislike');
-          const headers= {
-             "Authorization": "Bearer" + ' ' + localStorage.getItem('mytoken'),
-            'Content-Type' : 'multipart/form-data'
-          };console.log(headers);
-          axios
-          .post('/likes', {
-              userID: this.userID,
-              publicationID: this.publication_by_id,
-              like_user: this.like,
-              dislike_user: this.dislike,
-          }, {"headers" : headers})
-          .then(
-            response => {
-              console.log(response);
-              location.reload()
-
-              }
-          )
-          .catch (
-            error => console.log(error)
-          )
-        } else{
-          this.msg_err= 'Please login to your account'
-        }
-    
-         
       },
 
       deletePublication(){
@@ -236,20 +196,6 @@ export default {
                     console.log('ERROR')
                 )
     
-      axios.get('/likes/total_dislikes/' + this.publication_by_id)
-      
-          .then(
-          response =>  {
-              console.log(response.data.data[0].total_dislikes);
-              this.dislike_count = response.data.data[0].total_dislikes;  
-
-              }
-          ) 
-          .catch(
-              console.log('ERROR')
-          )
-
-
 
       //to get the username
       axios
@@ -291,20 +237,25 @@ export default {
       flex-direction: column;  
       align-self: center; 
       width: 80%;
+      text-align: center;
 
-      .info_post{
-        span{
-          margin-right: 10px;
-        }
-        .posted_at{
+      .posted_at{
           font-size: 12px;
         }
-        
+      .info_post{
+        .info-user{
+          font-size: 12px ;
+          margin-bottom: 10px;
+        }
+         h2{ 
+          text-align: center;
+          font-size: 18px;
+          margin-bottom: 10px;
+        }
+
       }
 
       .post{
-        background-color: rgb(156, 180, 223);
-        width: 100%;
         height: auto;
         padding: 5px 20px;
         border-radius: 0px;
@@ -313,12 +264,13 @@ export default {
         position: relative;
    
 
-          h2{
-            text-align: center;
-          }
+       
 
+        .like-btn{
+          margin-bottom: 5px;
+        }
         .comment-section{
-          width: 92%;
+          width: 97%;
           height: auto;
           padding: 5px;
           background-color: rgb(255, 255, 255);
@@ -329,7 +281,7 @@ export default {
           position: absolute;
           right: 0;
           top: 0;
-          margin-right: 5px;
+          margin-right: 20px;
           font-size: 22px;
           font-weight: bold;
           background-color: transparent;
@@ -337,14 +289,15 @@ export default {
         }
         .gif_img{
           width: 100%;
-          height: 200px;
-          background-color: aqua;
+          margin-bottom: 5px;
+          object-fit: scale-down;
         }
         .comment-field-container{
            display: flex;
+           margin-top: 5px;
           .comment_field{
               height: 30px;
-              width: 99%;  
+              width: 100%;  
           }
 
         }
