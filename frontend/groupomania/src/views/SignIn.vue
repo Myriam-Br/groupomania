@@ -3,9 +3,9 @@
       <h1>SIGN IN</h1>
       <form @submit.prevent="login" class="form-signin">
         <label for="email">Email</label>
-        <input type="email" class="email" v-model="email">
+        <input type="email" id="email" class="email" v-model="email">
         <label for="password">Password</label>
-        <input type="password" class="password" v-model="password">  
+        <input type="password" id="password" class="password" v-model="password">  
         <button  @click="login" class="btn-signin">Sign In</button>
       </form>
       <div class="error">{{this.errormsg}}</div>
@@ -116,8 +116,9 @@ export default {
         text-align: center;
         margin-bottom: 20px;
         .link-to-signup{
-        color: rgb(117, 4, 42);
-        font-weight: 500;  
+         color: rgb(0, 255, 200);
+        font-weight: 500;    
+        font-size: 18px;  
         }
 
     }

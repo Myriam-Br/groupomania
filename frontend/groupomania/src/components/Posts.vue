@@ -1,20 +1,24 @@
 <template> 
     <div class="container">
         <div class="post">  
-            <h2>{{publication.title}}</h2>
-            <span class="info_user"> Posté par: {{this.username}}</span>       
+            <div>
+                 <h2>{{publication.title}}</h2>
+                <span class="info_user"> Posté par: {{this.username}}</span>  
+            </div>
+                
             
             <img  class="gif_img" alt="image" :src="publication.imageUrl">
-            <span class="posted_at"> Posted: {{this.create_at_format}}</span> 
+            
             <div class="interaction">
                 <div class="likes">
                     <div class="like">
-                        <button @click="sendLike" class="like-btn"></button>
+                        <button @click="sendLike" class="like-btn" aria-label="like"></button>
                         <span class="like-counter" >{{this.like_count}}</span>
                     </div>
                 </div> 
                 <button @click="showComments" class="show" >...</button>
             </div>
+            <span class="posted_at"> Posted: {{this.create_at_format}}</span> 
             <span class="err_msg">{{this.msg_err_like}}</span>
          </div>
 
@@ -173,8 +177,7 @@ export default {
 
     .gif_img{
         margin-top: 5px;
-        width: 100%;
-        object-fit: scale-down;
+        width: 80%;  
         margin-bottom: 8px;
     }
     .posted_at{
@@ -219,6 +222,16 @@ export default {
 
     
    
+}
+
+@media screen and ( min-width:500px ) {
+    .post{
+        width: 60%;
+        .gif_img{
+
+        }
+    }
+    
 }
 
 

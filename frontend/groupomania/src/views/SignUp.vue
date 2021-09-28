@@ -5,13 +5,13 @@
       <form @submit.prevent="register" class="form-signup">
 
         <label for="username">Username</label>
-        <input type="text" class="username" v-model= "username">
+        <input type="text" id="username" class="username" v-model= "username">
 
         <label for="email">Email</label>
-        <input type="email" class="email" v-model= "email">
+        <input type="email" id="email" class="email" v-model= "email">
 
         <label for="password">Password</label>
-        <input type="password" class="password" v-model= "password">
+        <input type="password" id="password" class="password" v-model= "password">
 
         <button @click="register"  class="btn-signup">Sign up</button>
       </form>
@@ -51,10 +51,12 @@ export default {
               this.err_msg = 'Please fill all the fields correctly';
             } else if(response.data.status==true){
                this.err_msg='' ;
-               this.$router.push('/signin');       
+               this.$router.push('/signin');    
+               location.reload()   
             }else{
                console.log('ERROR');
-               this.err_msg = 'Password must contain 6 or more characters a digita lower-case letter an upper-case letter'
+               this.err_msg = 'Password must contain 6 or more characters a digita lower-case letter an upper-case letter';
+               
            }
      
           } 
@@ -105,14 +107,16 @@ export default {
         text-align: center;
 
         .link-to-signin{
-        color: rgb(117, 4, 42);
+        color: rgb(0, 255, 200);
         font-weight: 500;    
+        font-size: 18px;
         }
     }
 
     .msg_err{
       text-align: center;
       margin-bottom: 10px;
+      color: red;
     }
 
 }

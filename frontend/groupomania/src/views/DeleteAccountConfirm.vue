@@ -13,6 +13,7 @@ export default {
     methods: {
         backToHome(){
             this.$router.push('/')
+            localStorage.clear()
         }
     }
 

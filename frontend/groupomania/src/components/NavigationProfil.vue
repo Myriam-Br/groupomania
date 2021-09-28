@@ -1,10 +1,8 @@
 <template>
    <div class="navigation">
-      <img :src="mylogoSVG" class="logo"/>    
+      <img :src="mylogoSVG" class="logo" alt="logo-entreprise-groupomania"/>    
       
     <div class="menu">
-   
-      
       <ul class="navigation-links">
         <div class="nav_default">
         <router-link class="link" :to="{ name : 'forum'}">Forum</router-link>
@@ -14,7 +12,7 @@
         <router-link class="link" :to="{ name : 'signin'}">Sign in</router-link>
         <router-link class="link" :to="{ name : 'signup'}">Sign up</router-link>   
         </div>  
-        <button v-else class="logout" @click="logout"><img class="power_off" :src="this.power_off" alt=""></button>         
+        <button v-else class="logout" @click="logout"><img class="power_off" :src="this.power_off" alt="disconnect"></button>         
       </ul>
     </div>
   </div>

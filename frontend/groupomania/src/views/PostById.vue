@@ -2,13 +2,11 @@
 <div class="container">
   <div class="post_container">
     <div class="info_post">
-        <h2>{{this.publication_title}}</h2>     
+        <h1>{{this.publication_title}}</h1>     
        <span class="info-user">Posté par: {{this.username_publication}}</span>
     </div>
     
     <div class="post">
-        <h2></h2>
-        <span></span>
         <img  class="gif_img" alt="image" :src="this.publication_image_url">
         <span class="posted_at">Posted: {{this.create_at_format}}</span>
         <button v-if="this.show_btn_delete_publication" @click="deletePublication" class="btn_delete">X</button>
@@ -16,7 +14,7 @@
         <div class="interaction">
                 <div class="likes">
                     <div class="like">
-                        <button @click="sendLike" class="like-btn"></button>
+                        <button @click="sendLike" class="like-btn" aria-label="like"></button>
                         <span class="like-counter" >{{this.like_count}}</span>
                     </div>
                 </div> 
@@ -25,7 +23,8 @@
         <Comments  v-for="(comment_field, index) in this.comment_list" :key="index" :comment_field="comment_field" class="comment-section"/>
 
           <div class="comment-field-container">
-              <input class="comment_field" type="text" v-model ="comment_field"> 
+            <label for="comment_field" class="hidden" aria-label="commentaire">Commentaire</label>
+              <input id="comment_field" type="text" v-model ="comment_field"> 
               <button @click="createComment">send</button>    
           </div> 
 
@@ -285,22 +284,28 @@ export default {
           right: 0;
           top: 0;
           margin-right: 20px;
-          font-size: 22px;
+          margin-top: 4px;
+          font-size: 30px;
           font-weight: bold;
           background-color: transparent;
-          box-shadow: none;
+          border: black solid 2px;
+          color: azure;
         }
         .gif_img{
           width: 100%;
           margin-bottom: 5px;
-          object-fit: scale-down;
+          
         }
         .comment-field-container{
            display: flex;
            margin-top: 5px;
-          .comment_field{
+           width: 100%;
+          #comment_field{
               height: 30px;
               width: 100%;  
+          }
+          .hidden{
+            display: none;
           }
 
         }

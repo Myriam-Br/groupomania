@@ -24,32 +24,14 @@ export default {
             .then(
                 response => {
                     console.log(response);
-                    this.$router.push('deleteconfirmation')
-
+                    this.$router.push('/deleteconfirmation')     
                 }
-
             )
             .catch(
                error => console.log(error)
             )
-
-           
-            this.$router.push('/');  
-            localStorage.clear();
-            location.reload()
         },
-    /*
-        updateAccount() {
-             axios.put('/users/' + localStorage.getItem('userID'), {
-                email: this.email,
-                username: this.username,
-             });
-
-        }
-    */   
-
-
-       
+ 
     }
 
 }

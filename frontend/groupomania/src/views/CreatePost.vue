@@ -4,10 +4,11 @@
 
     <div class="gif-container">
         <h2>create your post</h2>
-        
-        <input class="publication_title" name="title" type="text" v-model="title_publication">
+        <label for="publication_title">TITLE</label>
+        <input id="publication_title" name="title" type="text" v-model="title_publication">
         <img class="file_preview" :src="this.preview" alt="">
-        <input @change="onFileChange" class="file_select" type="file" name="image" accept='image/*'/>  
+        <label for="file_select">Upload your file</label>
+        <input @change="onFileChange" id="file_select" type="file" name="image" accept='image/*'/>  
         <button @click="onUploadFile"   class="btn-create">Submit</button>      
     </div>  
 
@@ -99,7 +100,7 @@ export default {
     
     .gif-container{
     background-color: rgb(15, 54, 77);
-    width: 80%;
+    width: 70%;
     align-self: center;
     display: flex;
     flex-direction: column;
