@@ -25,7 +25,7 @@ exports.usersList = (req, res) => {
 }
 
 exports.usersById = (req, res) => {
-    var userID = req.params.id
+    let userID = req.params.id
     dbConnect.query('SELECT * FROM user WHERE id=?', userID, (error, result) => {
         if(error) {
             res.json({
@@ -57,7 +57,7 @@ exports.register = async(req, res) => {
                     //console.log('pwd available');
                     const hashedPwd =  await bcrypt.hash(password, 10);
                     //console.log(hashedPwd);
-                    var users = new User ({
+                    let users = new User ({
                         username: req.body.username,
                         email: req.body.email,
                         password: hashedPwd,
@@ -112,8 +112,8 @@ exports.loginAuth = (req, res) => {
 
 exports.login = async(req, res) => {
     console.log('session userid: ',req.sessionID);
-    var email = req.body.email;
-    var password = req.body.password;
+    let email = req.body.email;
+    let password = req.body.password;
 
     try{
         dbConnect.query('SELECT * FROM user WHERE email=?', [email], async(error, result) => {

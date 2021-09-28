@@ -18,7 +18,7 @@ exports.getComments = (req, res) => {
 }
 exports.getCommentByPublication = (req, res) => {
 
-    var publicationID = req.params.publicationID
+    let publicationID = req.params.publicationID
     dbConnect.query('SELECT * FROM comments  WHERE publicationID=? ORDER BY created_at DESC', publicationID, (error, result) => {
         if(error) {
             res.json({

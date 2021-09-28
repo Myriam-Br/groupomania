@@ -20,7 +20,7 @@ exports.getAllLikes = (req, res) => {
 }
 
 exports.getLikeByPublicationID = (req, res) => {
-    var publicationID = req.params.publicationID;
+    let publicationID = req.params.publicationID;
     dbConnect.query('SELECT * FROM likes WHERE publicationID=? ', publicationID, (error, result) => {
         if(error) {
             res.json({
@@ -37,7 +37,7 @@ exports.getLikeByPublicationID = (req, res) => {
 
 exports.getLikesTotal = (req, res) => {
    // console.log('RECUP ID PUBLICATION:', req.params.publicationID);
-    var publicationID = req.params.publicationID;
+    let publicationID = req.params.publicationID;
 
     dbConnect.query('SELECT IFNULL (SUM(like_user), 0) total_likes FROM likes WHERE publicationID=?', publicationID, (error, result) => {
         if(error) {
@@ -89,7 +89,7 @@ exports.likePublication =  (req, res) => {
 
 
 exports.deleteLikeDislike = (req, res) => {
-    var publicationID = req.params.publicationID;
+    let publicationID = req.params.publicationID;
     //console.log(publicationID);
     dbConnect.query('DELETE FROM likes WHERE publicationID=?', publicationID, (error, result) => {
             if(error)

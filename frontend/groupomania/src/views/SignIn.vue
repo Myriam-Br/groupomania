@@ -50,19 +50,19 @@ export default {
            }
         //console.log(response.data.status);
             //console.log(response.data);
-            var token = response.data.token;
+            let token = response.data.token;
             localStorage.setItem('mytoken',token);
-            var userID = response.data.userID;
+            let userID = response.data.userID;
             if(userID==undefined){
                 console.log('not valid');
             }else{
                 localStorage.setItem('userID',userID);
             }
-            var username = response.data.username;
+            let username = response.data.username;
             localStorage.setItem('username',username);
             
             
-            var email = response.data.data.user.email;
+            let email = response.data.data.user.email;
             //console.log(email);
             localStorage.setItem('email',email);     
             
